@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers\authentications;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
+use App\Http\Controllers\Controller;
+
+use Hash;
+use Session;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class LoginBasic extends Controller
 {
@@ -12,16 +18,27 @@ class LoginBasic extends Controller
     return view('content.authentications.auth-login-basic');
   }
 
-  public function login(Request $request)
+  public function validate_login(Request $request)
   {
-    $errors= '';
-      if($request['email-username']=="testing"){
-        return view('content.dashboard.dashboards-analytics');
-      }else{
-        $errors = "Incorrect Username or Password";
-        return view('content.authentications.auth-login-basic',['error'=>$errors]);
-      }
-      
+      $request->validate([
+          'username'=> 'required',
+          'password'=> 'required'
+      ]);
 
+      $credentials = $request->only('username','password');
+
+      if(Auth::attempt($credentials))
+      {
+          return redirect('/');
+      }
+
+      return redirect('auth/login')->with('success','Login details are not valid');
   }
+
+  public function logout(){
+    Session::flush();
+    Auth::logout();
+    return redirect('/');
+  }
+  
 }

@@ -19,8 +19,13 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'username',
         'password',
+        'role_id',
+        'first_name',
+        'middle_name',
+        'last_name',
+        'is_active'
     ];
 
     /**
@@ -41,4 +46,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+     //a user can have many payments
+     public function payment(){
+        return $this->hasMany('App\Models\Payment');
+    }
+
+    public function client(){
+        return $this->hasMany('App\Models\Client');
+    }
+
+    public function role(){
+        return $this->belongsTo('App\Models\Role');
+    }
 }

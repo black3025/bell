@@ -33,23 +33,22 @@
     @php
     $activeClass = null;
     $currentRouteName = Route::currentRouteName();
-
+  
     if ($currentRouteName === $menu->slug) {
-    $activeClass = 'active';
+        $activeClass = 'active';
     }
     elseif (isset($menu->submenu)) {
-    if (gettype($menu->slug) === 'array') {
-    foreach($menu->slug as $slug){
-    if (str_contains($currentRouteName,$slug) and strpos($currentRouteName,$slug) === 0) {
-    $activeClass = 'active open';
-    }
-    }
-    }
-    else{
-    if (str_contains($currentRouteName,$menu->slug) and strpos($currentRouteName,$menu->slug) === 0) {
-    $activeClass = 'active open';
-    }
-    }
+        if (gettype($menu->slug) === 'array') {
+            foreach($menu->slug as $slug){
+                  if (str_contains($currentRouteName,$slug) and strpos($currentRouteName,$slug) === 0) {
+                      $activeClass = 'active open';
+                  }
+            }
+        }else{
+            if (str_contains($currentRouteName,$menu->slug) and strpos($currentRouteName,$menu->slug) === 0) {
+                  $activeClass = 'active open';
+            }
+        }
 
     }
     @endphp
