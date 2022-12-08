@@ -29,18 +29,18 @@ class Loan extends Model
    ];
 
     public function client(){
-       return $this->belongsTo('App\Model\Client','client_id','id');
+       return $this->belongsTo(Client::class)->orderby('account_name','asc');
    }
 
    public function payments(){
-       return $this->hasMany('App\Model\Payment');
+       return $this->hasMany(Payment::class);
    }
 
    public function client_sort(){
-       return $this->belongsTo('App\Model\Client','client_id','id')->orderBy('account_name','asc');   
+       return $this->belongsTo(Client::class)->orderBy('account_name','asc');   
    }
 
    public function area_sort(){
-    return $this->belongsTo('App\Model\Client','client_id','id')->orderBy('area_id','asc');   
-}
+         return $this->belongsTo(Client::class)->orderBy('area_id','asc');   
+   }
 }

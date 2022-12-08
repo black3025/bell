@@ -14,11 +14,6 @@
 </h4>
 
 <div class="row" style="display:flex; justify-content:space-between">
-    {{-- <!-- <ul class="nav nav-pills flex-column flex-md-row mb-3">
-      <li class="nav-item"><a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i> Account</a></li>
-      <li class="nav-item"><a class="nav-link" href="{{url('pages/account-settings-notifications')}}"><i class="bx bx-bell me-1"></i> Notifications</a></li>
-      <li class="nav-item"><a class="nav-link" href="{{url('pages/account-settings-connections')}}"><i class="bx bx-link-alt me-1"></i> Connections</a></li>
-    </ul> --> --}}
     <div class="card mb-4 col-md-6" >
       <h5 class="card-header">Profile Details</h5>
       <!-- Account -->
@@ -143,16 +138,26 @@
                                     Active loan
                             </div>
                         </div>
-                        <table class="table table-bordered" width='100%'>
-                            <tr>
-                                <td><b>Principal Amount: </b></td>
-                                <td>&#8369; {{number_format($client->loans->where('close_date',NULL)->first()->principle_amount,2)}}</td>
-                            </tr>
-                            <tr>
-                                <td><b>Cycle:</b></td>
-                                <td>{{$client->loans->where('close_date',NULL)->first()->cycle}}</td>
-                            </tr>
-                        </table>
+                        @if($client->loans->where('close_date',NULL)->first())
+                            <table class="table table-bordered" width='100%'>
+                                <tr>
+                                    <td><b>Principal Amount: </b></td>
+                                    <td>&#8369; {{number_format($client->loans->where('close_date',NULL)->first()->principle_amount,2)}}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Cycle:</b></td>
+                                    <td>{{$client->loans->where('close_date',NULL)->first()->cycle}}</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Balance:</b></td>
+                                    <td>&#8369; {{number_format($client->loans->where('close_date',NULL)->pluck('balance')->first())}}</td>
+                                </tr>
+                            </table>
+                        @else
+                            <div class="divider-text text-primary">
+                                    No active loan
+                            </div>
+                        @endif
                         
                         <div class="divider">
                             <div class="divider-text">

@@ -9,23 +9,7 @@
     {
       "menuHeader": "Menu"
     },
-    {
-      "name": "Layouts",
-      "icon": "menu-icon tf-icons bx bx-layout",
-      "slug": "layouts",
-      "submenu": [
-        {
-          "url": "/layouts/without-menu",
-          "name": "Without menu",
-          "slug": "layouts-without-menu"
-        },
-        {
-          "url": "/layouts/without-navbar",
-          "name": "Without navbar",
-          "slug": "layouts-without-navbar"
-        }
-      ]
-    },
+
     {
       "name": "Clients",
       "icon": "menu-icon tf-icons bx bx-group",
@@ -34,10 +18,21 @@
     },
     {
       "name": "Loans",
-      "icon": "menu-icon tf-icons bx bx-group",
+      "icon": "menu-icon tf-icons bx bxs-landmark",
       "slug": "loans.index",
       "url": "/loans"
     },
+    {
+      "name": "Payments",
+      "icon": "menu-icon tf-icons bx bxl-paypal",
+      "slug": "payments.index",
+      "url": "/payments"
+    },
+
+    {
+      "menuHeader": "Reporting"
+    },
+
 
 
 

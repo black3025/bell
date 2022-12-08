@@ -18,7 +18,11 @@
     function acctname(){
  	 	var name = document.getElementById("first_name").value;
  	 	var last = document.getElementById("last_name").value;
- 	 	document.getElementById("account_name").value = last+" "+name;
+        var mid = document.getElementById("middle_name").value;
+        if(mid!= "")
+ 	 	    document.getElementById("account_name").value = last+", "+name+" "+mid[0]+".";
+        else
+            document.getElementById("account_name").value = last+", "+name;
     }
   </script>
 @endsection
@@ -27,13 +31,6 @@
     <h4 class="fw-bold mb-2">
         <span class="text-muted fw-light">Clients </span>
     </h4>
-    @if($message = Session::get('success'))
-        <div class="alert alert-success alert-dismissible" role="alert">
-            <span>{{$message}}</span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
-          </button>
-        </div>
-    @endif
     <div class="card">
         <h5 class="card-header">
             <div style="display:flex; justify-content: space-between;">
@@ -68,7 +65,7 @@
                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="{{ url('/clients/'.$client->id) }}"><i class="bx bx-id-card me-1"></i>Profile</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-layer-plus me-1"></i>New Loan</a>
+                                <a class="dropdown-item" href="javascript:void(0);" onclick="setForm({{$client->id}}, {{$client->loans->max('cycle')+1}});" data-bs-toggle="modal" data-bs-target="#addLoan"><i class="bx bx-layer-plus me-1"></i>New Loan</a>
                             </div>
                             </div>
                         </td>
@@ -81,12 +78,15 @@
             </div>
         </div>
     </div>
-<!--/ Hoverable Table rows -->
+    
+    <!--/ Hoverable Table rows -->
 
     <div class="modal fade" id="addClient" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
               @include('content.clients.create');
             </div>
     </div>
+    
+     @include('content.clients.create-loan');
    
 @endsection

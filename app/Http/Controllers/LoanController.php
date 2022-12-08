@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Loan;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use Auth;
 class LoanController extends Controller
@@ -14,7 +15,8 @@ class LoanController extends Controller
      */
     public function index()
     {
-        //
+        $loans = Loan::orderby(Client::select('account_name')->whereColumn('clients.id','loans.client_id'))->where('close_date',null)->get();
+        return view('content.loans.index',['loans'=>$loans]);
     }
 
     /**
@@ -72,7 +74,7 @@ class LoanController extends Controller
      */
     public function show(Loan $loan)
     {
-        //
+        return view('content.loans.show',['loan'=>$loan]);
     }
 
     /**

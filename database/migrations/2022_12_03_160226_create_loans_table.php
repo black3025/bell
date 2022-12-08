@@ -31,9 +31,6 @@ return new class extends Migration
             $table->string('approval_date')->nullable();
             $table->string('approval_notes')->nullable();
             //pasiguro
-            $table->string('acctname')->nullable();
-            $table->string('area')->nullable();
-
             $table->timestamps();
         });
     }

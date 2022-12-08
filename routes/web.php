@@ -26,6 +26,7 @@ Route::middleware('auth')->group(function () {
         // Route::get('/clients', $controller_path.'\ClientController@index')->name('clients');
         Route::resource('clients',$controller_path.'\ClientController',['names'=>'clients']);
         Route::resource('loans', $controller_path.'\LoanController',['names'=>'loans']);
+        Route::resource('payments', $controller_path.'\PaymentController',['names'=>'payments']);
      
 });
 

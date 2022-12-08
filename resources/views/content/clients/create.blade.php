@@ -6,7 +6,7 @@
     </div>
     <div class="modal-body">
             <div class="row mb-2" >
-                <input hidden tabindex="-1"  class="form-control" id="account_name" name="account_name" value="" required>
+                <input hidden tabindex="-1"  class="form-control" id="account_name" name="account_name" autocomplete="off" value="" required>
             </div>
             <div class="row mb-2">
                 <label for="first_name" class="col-sm-2 col-form-label">Name</label>
@@ -23,7 +23,7 @@
                 <div class="col-sm-10">
                     <div class="input-group input-group-merge">
                         <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-user"></i></span>
-                        <input type="text" id="middle_name" name="middle_name" value="" class="form-control" placeholder="Enter Middle Name">
+                        <input type="text" id="middle_name" onchange="acctname()"  name="middle_name" value="" class="form-control" placeholder="Enter Middle Name">
                     </div>
                 </div>
             </div>

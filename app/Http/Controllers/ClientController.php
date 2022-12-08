@@ -98,8 +98,6 @@ class ClientController extends Controller
                             'cycle' => $request['cycle'],
                             'is_active' => '1',
                             'loans' => '1',
-                            'area_id' => $request['area_id'],
-                            'acctname' => $request['account_name'],
                             'approvals' => '1',
                             'category' => '1',
                             'approval_date' => date('Y-m-d',strtotime($request['rel_date']. "1 days")),
@@ -114,7 +112,6 @@ class ClientController extends Controller
                         // {
                         //     payment::create(['loan_id'=>$addloan->id, 'client_id'=>$id,'amount'=>'0','p_nlid'=> $addloan->id, 'date'=>$lpd, 'user_id'=> Auth::user()->id, 'area'=>$addloan->area, 'acctname'=>$addloan->acctname]);
                         // }   
-
                         $mess = 'Client '.$new->client_id.' successfully added.';
                     }else{
                         $suc = false;
@@ -122,6 +119,7 @@ class ClientController extends Controller
                     }
                   return ['success'=> $suc, 'message'=> $mess];
             });
+            
             return $result;
         }
     }
