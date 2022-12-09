@@ -27,7 +27,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('clients',$controller_path.'\ClientController',['names'=>'clients']);
         Route::resource('loans', $controller_path.'\LoanController',['names'=>'loans']);
         Route::resource('payments', $controller_path.'\PaymentController',['names'=>'payments']);
-     
+        Route::post('/payments/pay', $controller_path.'\PaymentController@pay')->name('payments.index');
+        Route::get('/payments/post', $controller_path.'\PaymentController@postPay')->name('payments.index');
+        
 });
 
 // authentication

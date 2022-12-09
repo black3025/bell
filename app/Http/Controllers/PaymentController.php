@@ -6,7 +6,7 @@ use App\Models\Payment;
 use App\Models\Area;
 use App\Models\Loan;
 use Illuminate\Http\Request;
-
+use Auth;
 class PaymentController extends Controller
 {
     /**
@@ -19,6 +19,22 @@ class PaymentController extends Controller
         $payments = Loan::all();
         $area = Area::where('is_active',1)->get();
         return view('content.payments.index',["payments"=>$payments,"areas"=>$area]);
+    }
+
+
+
+    public function pay(Request $request)
+    {
+        if(Auth::user()->role->id > 1){
+            if($request->date < date('Y-m-d'))
+                return ['success'=>false, 'message'=>'Cannot Back date'];
+        }
+        
+        return route('/payments/post', ['date'=>$request->date, 'area'=>$request->area]) ;
+    }
+
+    public function postPay(){
+        return view('content.payments.pay');
     }
 
     /**
@@ -61,7 +77,8 @@ class PaymentController extends Controller
      */
     public function edit(Payment $payment)
     {
-        //
+
+        
     }
 
     /**

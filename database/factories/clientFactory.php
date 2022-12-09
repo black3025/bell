@@ -19,8 +19,8 @@ class clientFactory extends Factory
         $firstname = $this->faker->firstName();
         $lastname = $this->faker->lastName();
         return [
-            'client_id' =>'2022-'.$this->faker->unique()->numberBetween(1111,9999),
-            'account_name'=>$lastname .' '. $firstname,
+            'client_id' =>'2022-'.$this->faker->unique()->numberBetween(1000,9999),
+            'account_name'=>$lastname .', '. $firstname,
             'first_name' => $firstname,
             'last_name' => $lastname,
             'middle_name' => $this->faker->lastName(),

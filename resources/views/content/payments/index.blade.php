@@ -24,7 +24,7 @@
                         Payment Details
                     </div>
                 </h5>
-                <form onsubmit="postPay()">
+                <form onsubmit="return postPay()">
                     <div class="card-body">
                             <div class="row mb-2">
                                 <label for="lpd" class="col-sm-2 col-form-label">Last Payment Date</label>
@@ -39,7 +39,7 @@
                                 <div class="row mb-2">
                                     <label for="date" class="col-sm-2 col-form-label">Date</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="date" value="2021-06-18" id="html5-date-input">
+                                        <input class="form-control" type="date" value="{{date('Y-m-d')}}" id="date">
                                     </div>
                                 </div>
                                 <div class="row mb-2">                   
@@ -70,16 +70,38 @@
 
                 <div class="card-body">
                     <table>
-                        @foreach ($areas as $area)
-                            <tr>
-                                <td>{{$area->name}}</td>
-                                <td>{{$payments->client->where('area_id',$area->id)->sum('amount');}}
-                        @endforeach
-                    </table?
+                      
+                    </table>
                 </div>
             
             </div>
         </div>
     </div>
-    
+    <<script>
+        function postPay() {
+            var form = {
+                _token: $('input[name=_token]').val(),
+                date: $('#date').val(),
+                area: $('#area').val(),
+                ajax:1
+            }
+            $.ajax({
+	         url : "{{url('payments/pay')}}",
+	         data :  form,
+	         type : "POST",
+	         success : function(msg){
+                //console.log(msg['success']);
+                // if(msg['success']){
+                //     // success(msg['message']);
+                //     //console.log(msg['message']);
+                //     window.location.replace(msg['message'])
+                // }else{
+                //     error(msg['message']);
+                // }
+                window.location.replace(msg);
+             }
+            })
+            return false;
+        }
+    </script>
 @endsection

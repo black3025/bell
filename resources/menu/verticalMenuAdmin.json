@@ -1,0 +1,51 @@
+{
+  "menu": [
+    {
+      "url": "/",
+      "name": "Dashboard",
+      "icon": "menu-icon tf-icons bx bx-home-circle",
+      "slug": "dashboard"
+    },
+    {
+      "menuHeader": "Menu"
+    },
+
+    {
+      "name": "Clients",
+      "icon": "menu-icon tf-icons bx bx-group",
+      "slug": "clients.index",
+      "url": "/clients"
+    },
+    {
+      "name": "Loans",
+      "icon": "menu-icon tf-icons bx bxs-landmark",
+      "slug": "loans.index",
+      "url": "/loans"
+    },
+    {
+      "name": "Payments",
+      "icon": "menu-icon tf-icons bx bxl-paypal",
+      "slug": "payments.index",
+      "url": "/payments"
+    },
+
+    {
+      "menuHeader": "Reporting"
+    },
+    {
+      "menuHeader": "Admin"
+    },
+    {
+      "name": "Users",
+      "icon": "menu-icon tf-icons bx bxl-paypal",
+      "slug": "payments.index",
+      "url": "/payments"
+    },
+    {
+      "name": "Roles",
+      "icon": "menu-icon tf-icons bx bxl-paypal",
+      "slug": "payments.index",
+      "url": "/payments"
+    }
+  ]
+}

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Auth;
 
 class MenuServiceProvider extends ServiceProvider
 {
@@ -23,7 +24,15 @@ class MenuServiceProvider extends ServiceProvider
    */
   public function boot()
   {
-    $verticalMenuJson = file_get_contents(base_path('resources/menu/verticalMenu.json'));
+    if(Auth::user()){
+      if(Auth::user()->role->id > 1)
+        $verticalMenuJson = file_get_contents(base_path('resources/menu/verticalMenuUser.json'));
+      else
+        $verticalMenuJson = file_get_contents(base_path('resources/menu/verticalMenuAdmin.json'));
+   }else{
+      $verticalMenuJson = file_get_contents(base_path('resources/menu/verticalMenuAdmin.json'));
+   }
+
     $verticalMenuData = json_decode($verticalMenuJson);
 
     // Share all menuData to all the views
