@@ -143,7 +143,7 @@
                             <td width="35" align="right">
                                 {{number_format($total)}}
                             </td>
-                            <td width="40">
+                            <td width="40" align="right">
                                 {{number_format($due)}}
                             </td>
                             <td width="32" align="right">{{number_format($overdue)}}</td>
@@ -164,13 +164,16 @@
                             <td align="center" colspan="2">Total: </td>
                             @for($day = $begindate; $day <= $enddate; $day++ )
                                 <td width="35" align="right">
-                                    {{-- @if($loans->payments->where('date',$day)->sum('amount'))
+                                    @if( $payments->where('date', $day)->wherehas('loan', function ($query) use ($area){
+                                            $query->with('client',function ($query) use ($area) {
+                                                        $query->where('area',$area->id);
+                                                });
+                                    })->sum('amount') )
 
-                                        {{ number_format( $loans->payments->where('date',$day)->sum('amount'))}}
+                                        {{ $payments->where('date', $day)->sum('amount') }}
                                     @else
                                         0
-                                    @endif --}}
-                                    0
+                                    @endif
                                 </td>
                             @endfor
                             <td align="right">0</td>
