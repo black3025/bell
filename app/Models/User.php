@@ -49,14 +49,18 @@ class User extends Authenticatable
     
      //a user can have many payments
      public function payment(){
-        return $this->hasMany('App\Models\Payment');
+        return $this->hasMany(Payment::class);
     }
 
     public function client(){
-        return $this->hasMany('App\Models\Client');
+        return $this->hasMany(Clien::class);
     }
 
     public function role(){
-        return $this->belongsTo('App\Models\Role');
+        return $this->belongsTo(Role::class);
+    }
+
+    public function loans(){
+        return $this->hasMany(Loan::class);
     }
 }

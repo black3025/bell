@@ -22,14 +22,17 @@ class LoginBasic extends Controller
   {
       $request->validate([
           'username'=> 'required',
-          'password'=> 'required'
+          'password'=> 'required',
       ]);
 
       $credentials = $request->only('username','password');
 
       if(Auth::attempt($credentials))
       {
-          return redirect('/');
+          if(Auth::user()->is_active ==1)
+            return redirect('/');
+          else
+            return redirect('auth/login')->with('success','User is deactivated. Contact Administrator.');
       }
 
       return redirect('auth/login')->with('success','Login details are not valid');

@@ -57,7 +57,7 @@
                 <div class="col-sm-10">
                     <div class="input-group input-group-merge">
                         <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-user"></i></span>
-                        <input type="text" id="middle_name" name="middle_name" value="{{$client->middle_name}}" class="form-control" placeholder="Enter Middle Name">
+                        <input type="text" id="middle_name" onchange="acctname()" name="middle_name" value="{{$client->middle_name}}" class="form-control" placeholder="Enter Middle Name">
                     </div>
                 </div>
             </div>
@@ -142,7 +142,7 @@
                             <table class="table table-bordered" width='100%'>
                                 <tr>
                                     <td><b>Principal Amount: </b></td>
-                                    <td>&#8369; {{number_format($client->loans->where('close_date',NULL)->first()->principle_amount,2)}}</td>
+                                    <td>&#8369; {{number_format($client->loans->where('close_date',NULL)->first()->principle_amount)}}</td>
                                 </tr>
                                 <tr>
                                     <td><b>Cycle:</b></td>
@@ -168,7 +168,7 @@
                             @foreach($client->loans->where('close_date','<>',NULL)->take(3) as $loan)
                             <tr>
                                 <td><b>Principal Amount: </b></td>
-                                <td>&#8369; {{number_format($loan->principle_amount,2)}}</td>
+                                <td>&#8369; {{number_format($loan->principle_amount)}}</td>
                             </tr>
                             <tr>
                                 <td><b>Cycle:</b></td>
@@ -192,10 +192,14 @@
         </div>
 </div>
 <script>
-  function acctname(){
+    function acctname(){
  	 	var name = document.getElementById("first_name").value;
  	 	var last = document.getElementById("last_name").value;
- 	 	document.getElementById("account_name").value = last+" "+name;
+        var mid = document.getElementById("middle_name").value;
+        if(mid!= "")
+ 	 	    document.getElementById("account_name").value = last+", "+name+" "+mid[0]+".";
+        else
+            document.getElementById("account_name").value = last+", "+name;
     }
     function updateForm(urlEdit){
         var form = $('#editProfile').serialize();
@@ -207,7 +211,7 @@
                 console.log(msg);
                 if(msg['success']){
                     success(msg['message']);
-                    //setTimeout(function(){window.location.reload();},1500);
+                    setTimeout(function(){window.location.reload();},1500);
                 }else{
                     error(msg['message']);
                 }

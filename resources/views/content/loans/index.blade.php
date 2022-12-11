@@ -65,6 +65,11 @@
                             <div class="dropdown">
                                 <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="bx bx-dots-vertical-rounded"></i></button>
                                 <div class="dropdown-menu">
+                                @if(Auth::user()->role_id ==1)
+                                            <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editLoan" onclick="editLoan({{$loan}})">
+                                                <i class='bx bx-edit'></i>Edit
+                                            </a>
+                                @endif
                                     {{--LOAN EXTENSION PROGRAM <a class="dropdown-item" href="{{ url('/loans/'.$loan->id) }}"><i class="bx bx-id-card me-1"></i>Profile</a> --}}
                                     <a class="dropdown-item" href="{{ url('/loans/'.$loan->id) }}"><i class="bx bx-receipt me-1"></i>Statement of Account</a>
                                     @if(Auth::user()->role_id ==1)
@@ -84,10 +89,19 @@
     </div>
 <!--/ Hoverable Table rows -->
 
-    <div class="modal fade" id="addClient" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="editLoan" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
-              {{-- @include('content.clients.create'); --}}
+                @include('content.loans.update');
             </div>
     </div>
+
+    <script>
+        function editLoan(loan)
+        {
+            $('#Uid').val(loan['id']);
+            $('#Uprinciple_amount').val(loan['principle_amount']);
+            $('#Ucycle').val(loan['cycle']);
+        }
+    </script>
    
 @endsection

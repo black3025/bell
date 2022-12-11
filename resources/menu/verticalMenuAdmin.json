@@ -33,19 +33,25 @@
       "menuHeader": "Reporting"
     },
     {
+      "name": "Reports",
+      "icon": "menu-icon tf-icons bx bx-printer",
+      "slug": "reports.index",
+      "url": "/reports"
+    },
+    {
       "menuHeader": "Admin"
     },
     {
       "name": "Users",
-      "icon": "menu-icon tf-icons bx bxl-paypal",
-      "slug": "payments.index",
-      "url": "/payments"
+      "icon": "menu-icon tf-icons bx bx-user-circle",
+      "slug": "users.index",
+      "url": "/users"
     },
     {
       "name": "Roles",
-      "icon": "menu-icon tf-icons bx bxl-paypal",
-      "slug": "payments.index",
-      "url": "/payments"
+      "icon": "menu-icon tf-icons bx bxs-user-badge",
+      "slug": "roles.index",
+      "url": "/roles"
     }
   ]
 }

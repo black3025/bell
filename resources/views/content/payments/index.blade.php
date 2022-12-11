@@ -20,26 +20,33 @@
         <div class="col-md-8">
             <div class="card">
                 <h5 class="card-header">
-                    <div style="display:flex; justify-content: space-between;">
+                    <div style="display:flex; justify-content: space-between;" class="mb-3">
                         Payment Details
                     </div>
+
+                    @if($errors != "")
+                        <div style="display:flex; justify-content: space-between;">
+                            <span class="text-danger">{{$errors}}</span>
+                        </div>
+                   @endif
+
                 </h5>
-                <form onsubmit="return postPay()">
+                <form method="post" action="\payments\pay">
+                    @csrf   
                     <div class="card-body">
                             <div class="row mb-2">
                                 <label for="lpd" class="col-sm-2 col-form-label">Last Payment Date</label>
                                 <div class="col-sm-10">
                                     <div class="input-group input-group-merge">
-                                        <span class="form-control" style="border:none;">{{$payments->max('date')}}</span>
-                                        <span id="basic-icon-default-company2" style="border:none;" class="input-group-text text-primary"><i class='bx bx-calendar-check text-primary'></i></span>
+                                        <span id="basic-icon-default-company2" class="input-group-text"><i class='bx bx-calendar-check' ></i></span>
+                                        <input type="text" id="lpd" disabled required name="lpd" class="form-control" value = "{{ $lpd ? date('Y-m-d', strtotime($lpd)) : '' }}">
                                     </div>
                                 </div>
                             </div>
-                             @csrf   
                                 <div class="row mb-2">
-                                    <label for="date" class="col-sm-2 col-form-label">Date</label>
+                                    <label for="payday" class="col-sm-2 col-form-label">Date</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="date" value="{{date('Y-m-d')}}" id="date">
+                                        <input class="form-control" type="date" value="{{date('Y-m-d')}}" id="payday" name="payday">
                                     </div>
                                 </div>
                                 <div class="row mb-2">                   
@@ -77,31 +84,4 @@
             </div>
         </div>
     </div>
-    <<script>
-        function postPay() {
-            var form = {
-                _token: $('input[name=_token]').val(),
-                date: $('#date').val(),
-                area: $('#area').val(),
-                ajax:1
-            }
-            $.ajax({
-	         url : "{{url('payments/pay')}}",
-	         data :  form,
-	         type : "POST",
-	         success : function(msg){
-                //console.log(msg['success']);
-                // if(msg['success']){
-                //     // success(msg['message']);
-                //     //console.log(msg['message']);
-                //     window.location.replace(msg['message'])
-                // }else{
-                //     error(msg['message']);
-                // }
-                window.location.replace(msg);
-             }
-            })
-            return false;
-        }
-    </script>
 @endsection

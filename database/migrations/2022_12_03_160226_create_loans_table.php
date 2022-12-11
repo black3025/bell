@@ -30,6 +30,8 @@ return new class extends Migration
             $table->tinyInteger('approvals');
             $table->string('approval_date')->nullable();
             $table->string('approval_notes')->nullable();
+            $table->Integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
             //pasiguro
             $table->timestamps();
         });

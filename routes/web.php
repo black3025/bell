@@ -22,14 +22,36 @@ Route::middleware('auth')->group(function () {
         Route::get('/', $controller_path . '\dashboard\Analytics@index')->name('dashboard');
 
         //Clients
-        // Route::get('/clients', $controller_path.'\ClientController@index')->name('clients');
-        // Route::get('/clients', $controller_path.'\ClientController@index')->name('clients');
         Route::resource('clients',$controller_path.'\ClientController',['names'=>'clients']);
+
+        //loans
         Route::resource('loans', $controller_path.'\LoanController',['names'=>'loans']);
+
+        //payments
         Route::resource('payments', $controller_path.'\PaymentController',['names'=>'payments']);
         Route::post('/payments/pay', $controller_path.'\PaymentController@pay')->name('payments.index');
         Route::get('/payments/post', $controller_path.'\PaymentController@postPay')->name('payments.index');
+
         
+        Route::post('/users/updatePass',$controller_path.'\UserController@updatePass');
+
+
+        //admin only
+        Route::resource('users', $controller_path.'\UserController',['names'=>'users']);
+        Route::get('users/status_change/{id}',$controller_path.'\UserController@status');
+        Route::get('users/resetPW/{id}',$controller_path.'\UserController@resetPW');
+        Route::resource('roles', $controller_path.'\RoleController',['names'=>'roles']);
+        Route::get('roles/status_change/{id}',$controller_path.'\RoleController@status');
+        Route::post('roles/update/{id}',$controller_path.'\RoleController@updateR');
+        Route::resource('reports',$controller_path.'\ReportController',['names'=>'reports']);
+
+        //reports
+        Route::post('/report/daily',$controller_path.'\ReportController@dcrAll');
+        Route::post('/report/dailyNo',$controller_path.'\ReportController@dailyNo');
+        Route::post('/report/SOA', $controller_path.'\ReportController@SOA');
+        Route::post('/report/newAccount', $controller_path.'\ReportController@newAccount');
+        Route::post('/report/ncr', $controller_path.'\ReportController@ncr');
+
 });
 
 // authentication

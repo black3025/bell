@@ -13,11 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('prevbals', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
-            $table->string('restriction');
-            $table->tinyInteger('is_active')->default(1);
+            $table->date('date');
+            $table->string('area');
+            $table->double('amount');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('prevbals');
     }
 };

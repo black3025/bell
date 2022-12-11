@@ -15,7 +15,6 @@ class Payment extends Model
        'or_number',
        'p_nlid',
        'user_id',
-       'client_id',
    ];
 
 

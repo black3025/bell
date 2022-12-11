@@ -21,16 +21,19 @@ class Loan extends Model
        'approvals',
        'aproval_date',
        'approval_notes',
-       'area',
-       'acctname',
        'is_active',
+       'user_id'
 
 
    ];
 
-    public function client(){
+   public function client(){
        return $this->belongsTo(Client::class)->orderby('account_name','asc');
    }
+
+   public function user(){
+    return $this->belongsTo(user::class);
+}
 
    public function payments(){
        return $this->hasMany(Payment::class);

@@ -55,6 +55,7 @@ class LoanController extends Controller
                 'category' => '1',
                 'approval_date' => date('Y-m-d',strtotime($request['rel_date']. "1 days")),
                 'approval_notes' => strtoupper(Auth::user()->name),
+                'user_id' =>Auth::user()->id
             ]);
 
             $addloan = Loan::create($add2);

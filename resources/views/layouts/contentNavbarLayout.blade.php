@@ -24,7 +24,11 @@ $container = ($container ?? 'container-xxl');
   <div class="layout-container">
 
     @if ($isMenu)
-    @include('layouts/sections/menu/verticalMenu')
+      @if(Auth::user()->role_id > 1)
+        @include('layouts/sections/menu/verticalMenu')
+      @else
+        @include('layouts/sections/menu/verticalMenuAdmin')
+      @endif
     @endif
 
 

@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
         
         DB::table('roles')->insert([
             'name'=>'Admin',
-            'restriction'=>'1'
+            'restriction'=>'1',
+            'is_active'=>'1'
         ]);
         DB::table('areas')->insert([
             'name'=>'A1',
@@ -35,7 +36,7 @@ class DatabaseSeeder extends Seeder
     		'username'=>'admin',
     		'name'=>'bulinaw',
     		
-    		'password'=>'$2y$10$su0u0tWHzbhL75ER.xctROZfP6XUUFE.ug0U6OF91O/mZWLuOcINa',
+    		'password'=>'$2y$10$TA0fz0wckv6q91uMDgfe7eHhJKIsp6FcxP9FnzvZqSAU64z/lY3Zq',
     		'role_id'=>'1',
     		'is_active'=>'1',
     		'remember_token'=>'6a2MXPNSn9YzHGJZSgQ9DSdLH9AtseeHr7NjGsV7IEe5KdW2bJKBlKFv6OK9'

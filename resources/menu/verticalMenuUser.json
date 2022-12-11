@@ -33,7 +33,11 @@
       "menuHeader": "Reporting"
     },
     {
-      "menuHeader": "Admin"
+      "name": "Reports",
+      "icon": "menu-icon tf-icons bx bx-printer",
+      "slug": "reports.index",
+      "url": "/reports"
     }
+
   ]
 }
