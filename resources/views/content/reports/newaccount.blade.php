@@ -61,7 +61,7 @@
                                 <td> {{ date('M. d, Y',strtotime($loan->created_at)) }}</td>
                                 <td> {{$loan->user->name}}</td>
                                 <td  align='right'>P {{number_format($loan->principle_amount,2)}}</td>
-                                <td  align='right'>P {{number_format(($loan->principle_amount- ($loan->principle_amount * 0.10)),2)}}</td>
+                                <td  align='right'>P {{number_format(($loan->principle_amount- ($loan->principle_amount * 0.19)),2)}}</td>
                             </tr>
                         @endif
                     @endforeach

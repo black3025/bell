@@ -186,7 +186,7 @@ class ReportController extends Controller
                                 $query->where('area_id', $area->id);
                         })->sum('principle_amount');
 
-            array_push($summary , ['area' => $area->name, 'amount'=>$sum, 'rel' => $sum - ($sum * 0.10)]);
+            array_push($summary , ['area' => $area->name, 'amount'=>$sum, 'rel' => $sum - ($sum * 0.19)]);
         }
         $pdf = PDF:: loadView('content.reports.newaccount',compact('loans','summary','from','to','areas'))->setOptions(['defaultFont' => 'sans-serif']);;
         return $pdf->stream('New Accounts',array("Attachment"=>false));

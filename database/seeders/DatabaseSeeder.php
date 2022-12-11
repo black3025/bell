@@ -50,6 +50,6 @@ class DatabaseSeeder extends Seeder
             'is_active'=>'1',
             'remember_token'=>'6a2MXPNSn9YzHGJZSgQ9DSdLH9AtseeHr7NjGsV7IEe5KdW2bJKBlKFv6OK9'
         ]);
-        \App\Models\Client::factory(20)->create();
+        // \App\Models\Client::factory(20)->create();
     }
 }

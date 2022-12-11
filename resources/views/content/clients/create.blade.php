@@ -41,7 +41,7 @@
                 <div class="col-sm-10">
                     <div class="input-group input-group-merge">
                         <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-buildings"></i></span>
-                        <input type="text" id="business" required name="business" class="form-control" placeholder="Business">
+                        <input type="text" id="business" name="business" class="form-control" placeholder="Business">
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                 <div class="col-sm-10">
                     <div class="input-group input-group-merge">
                         <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-money"></i></span>
-                        <input type="text" id="income" required name="income" class="form-control" placeholder="Other Source of Income">
+                        <input type="text" id="income" name="income" class="form-control" placeholder="Other Source of Income">
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                 <div class="col-sm-10">
                     <div class="input-group input-group-merge">
                         <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-phone"></i></span>
-                        <input type="number" id="contact_number" name="contact_number" required class="form-control" placeholder="09XXXXXXXX">
+                        <input type="number" id="contact_number" name="contact_number" class="form-control" placeholder="09XXXXXXXX">
                     </div>
                 </div>
             </div>

@@ -34,7 +34,7 @@
                     </tr>
                     <tr>
                         <td><b>Account name: </b> {{Str::upper($loan->client->account_name)}}</td>
-                        <td><b>Release Date: </b> P {{number_format($loan->principle_amount,2)}}</td>
+                        <td><b>Release Date: </b> {{date('F d, Y',strtotime($loan->rel_date,2))}}</td>
                     </tr>
                     <tr>
                         <td><b>Area:</b> {{Str::upper($loan->client->area->name)}} </td>
@@ -44,7 +44,7 @@
                         <td><b>Loan Cycle:</b> {{Str::upper($loan->cycle)}}</td>
                         <td><b>Close Date: </b> 
                             @if($loan->close_date=="")
-                                -----------
+                               
                             @else
                                 {{date('F d, Y',strtotime($loan->close_date))}}
                             @endif

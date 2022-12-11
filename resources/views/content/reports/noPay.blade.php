@@ -52,7 +52,13 @@
                         <td align="center">{{$loan->client->client_id}}</td>
                         <td >{{$loan->client->account_name}}</td>
                         <td align="center" >{{$loan->cycle}}</td>
-                        <td> {{date('M. d, Y', strtotime($loan->payments->max('date')))}}
+                        <td>
+                            @if($loan->payments->max('date'))
+                                {{date('M. d, Y', strtotime($loan->payments->max('date')))}}
+                            @else 
+                                
+                            @endif
+                        </td>
                         <td align='right'>P {{number_format($loan->principle_amount*0.01,2)}}</td>
                     </tr>
                 @endforeach
