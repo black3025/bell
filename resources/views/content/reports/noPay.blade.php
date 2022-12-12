@@ -48,7 +48,7 @@
             <tbody>
                 @foreach($loans ?? ''  as $key=>$loan)
                     <tr>
-                        <td align="center">{{$count}}</td>
+                        <td align="center">{{$key+1}}</td>
                         <td align="center">{{$loan->client->client_id}}</td>
                         <td >{{$loan->client->account_name}}</td>
                         <td align="center" >{{$loan->cycle}}</td>

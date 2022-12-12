@@ -150,7 +150,15 @@ class ReportController extends Controller
             ->whereColumn('clients.id', 'loans.client_id')
         )->with('payments')
         ->get();
-    $payments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))->get();
+    $payments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))
+                ->wherehas('loan' , function($query) use ($request)
+                {
+                    $query->wherehas('client', function($query) use ($request)
+                    {
+                        $query->where('area_id', $request->area);
+                    });
+                })
+                ->get();
 
     $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
     return $pdf->stream('Notes Collection Report',array("Attachment"=>false));
