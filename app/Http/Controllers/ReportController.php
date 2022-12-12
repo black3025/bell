@@ -166,7 +166,7 @@ class ReportController extends Controller
                 ->whereBetween('rel_date', array($bd,$ed))->sum('principle_amount');
 
     
-    $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments','newacct'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
+    $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments','newacct','nd'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
     return $pdf->stream('Notes Collection Report',array("Attachment"=>false));
 }
 

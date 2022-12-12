@@ -101,6 +101,7 @@
         {
             $('#id').val(loan['id']);
             $('#principle_amount').val(loan['principle_amount']);
+            $('#rel_date').val(loan['rel_date']);
             $('#cycle').val(loan['cycle']);
         }
     </script>

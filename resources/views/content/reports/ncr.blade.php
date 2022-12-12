@@ -71,9 +71,9 @@
                             //total for every payments before the enddate
                              $tpay = $loan->payments->where('date','<=',$enddate)->sum('amount');
                     
+
                             //days
                             $daycount = 100 - round((strtotime($enddate) - strtotime($loan->rel_date))/86400);
-
                             //total for all the NCR inclusive dates
                              $total = $loan->payments->whereBetween('date',array($begindate,$enddate))->sum('amount');
 
@@ -95,14 +95,14 @@
 
 
                             // begin computing the overdue
-                            $totalpayment=$loan->payments->where('date','<=',$begindate)->sum('amount');
+                            $totalpayment=$loan->payments->where('date','<',$begindate)->sum('amount');
                             if($count >= 100)
                                 $count = 100;
                             
                             if($loan->rel_date >= $begindate || ($loan->rel_date >= $begindate && $loan->rel_date <= $enddate))
                                 $overdue = 0;
                             else	
-                                $overdue = $daily * $count - $totalpayment;
+                                $overdue = $daily*$count;
                             
                             if($overdue <= 0)
                             {

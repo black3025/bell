@@ -18,7 +18,7 @@
         <div class="row mb-2">
             <label for="rel_date" class="col-sm-2 col-form-label">Release Date</label>
             <div class="col-sm-10">
-                <input class="form-control" required type="date" id="rel_date" name="rel_date" value="{{date('Y-m-d')}}"/>
+                <input class="form-control" required type="date" id="rel_date" name="rel_date"/>
             </div>
         </div>
         <div class="row mb-2">
