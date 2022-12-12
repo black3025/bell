@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
 
         //loans
         Route::resource('loans', $controller_path.'\LoanController',['names'=>'loans']);
-
+        Route::post('/loans/updateLoan',$controller_path.'\LoanController@updateLoan');
         //payments
         Route::resource('payments', $controller_path.'\PaymentController',['names'=>'payments']);
         Route::post('/payments/pay', $controller_path.'\PaymentController@pay')->name('payments.index');

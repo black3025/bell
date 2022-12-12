@@ -113,7 +113,6 @@
                             }
 
                             //computing the current balance
-                            $txtbalance = $loan->principle_amount - $tpay;
                             $tpay = $loan->payments->where('date','<=',$enddate)->sum('amount');	
                             $balance = $loan->principle_amount - $tpay;
 
@@ -133,7 +132,7 @@
                             $grandadvance += $advance;
                             $grandoverdue += $overdue;
                             $granddue += $due;  
-                            $grandbalance += $txtbalance;
+                            $grandbalance += $balance;
                             $grandcoll += $collectibles; 
                             $grandAM += $daily;  
                         @endphp

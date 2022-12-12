@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Loan;
 use App\Models\Client;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Auth;
 class LoanController extends Controller
@@ -87,6 +88,28 @@ class LoanController extends Controller
     public function edit(Loan $loan)
     {
         //
+    }
+
+    public function updateLoan(Request $request)
+    {
+        $payments = Payment::where('loan_id',$request->id)->sum('amount');
+        $balance = $request->principle_amount - $payments;
+        $update = Loan::where('id', $request->id)->update([
+            'rel_date'=> $request['rel_date'],
+            'beg_date' => date('Y-m-d',strtotime($request['rel_date']. "1 days")),
+            'end_date' => date('Y-m-d',strtotime($request['rel_date']. "101 days")),
+            'principle_amount' => $request['principle_amount'],
+            'balance' => $balance,
+            'cycle' => $request['cycle'],
+        ]);
+
+        if($update )
+        {
+            return ['success'=>true, 'message'=>'Loan has been updated.'];
+        }else{
+            return ['success'=>false, 'message'=>'There was an error in updating the loan please contact developer.'];
+        }
+        
     }
 
     /**

@@ -150,6 +150,7 @@ class ReportController extends Controller
             ->whereColumn('clients.id', 'loans.client_id')
         )->with('payments')
         ->get();
+
     $payments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))
                 ->wherehas('loan' , function($query) use ($request)
                 {
@@ -159,8 +160,13 @@ class ReportController extends Controller
                     });
                 })
                 ->get();
+    //getting the new account
+    $newacct = Loan::whereHas('client',function($query) use($request)
+                            { $query->where('area_id',$request->area); })
+                ->whereBetween('rel_date', array($bd,$ed))->sum('principle_amount');
 
-    $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
+    
+    $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments','newacct'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
     return $pdf->stream('Notes Collection Report',array("Attachment"=>false));
 }
 
