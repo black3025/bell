@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/report/SOA', $controller_path.'\ReportController@SOA');
         Route::post('/report/newAccount', $controller_path.'\ReportController@newAccount');
         Route::post('/report/ncr', $controller_path.'\ReportController@ncr');
-
+        Route::post('/report/targetPerformance',$controller_path.'\ReportController@targetPerformance');
 });
 
 // authentication

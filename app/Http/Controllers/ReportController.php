@@ -7,6 +7,7 @@ use App\Models\Payment;
 use App\Models\Client;
 use App\Models\Area;
 use App\Models\Loan;
+use App\Models\Prevbal;
 use PDF;
 use Auth;
 
@@ -165,8 +166,45 @@ class ReportController extends Controller
                             { $query->where('area_id',$request->area); })
                 ->whereBetween('rel_date', array($bd,$ed))->sum('principle_amount');
 
+    $Tpayments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))
+                ->wherehas('loan' , function($query) use ($request)
+                {
+                    $query->wherehas('client', function($query) use ($request)
+                    {
+                        $query->where('area_id', $request->area);
+                    });
+                })
+                ->sum('amount');    
     
-    $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments','newacct','nd'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
+    $grandbalance = $loans->sum('principle_amount') - $Tpayments;
+
+
+
+    //getting the previous balance
+    $grandprev =  Prevbal::where('date',$nd)->where('area',$request->area)->pluck('amount')->first();
+    $prevdate = 0;
+    $qprevtemp = Prevbal::where('date',$ed)->where('area',$request->area)->pluck('id')->first();
+    if($qprevtemp != 0){
+        Prevbal::where('id',$qprevtemp)
+            ->update([
+                'amount' => $grandbalance,
+            ]);
+    }
+    else{
+        Prevbal::create([
+            'area' => $request->area,
+            'date' => $ed,
+            'amount' => $grandbalance,
+            ]);
+    }
+
+    $begbalance = $newacct + $grandprev;
+    
+    //end of getting the previous balance	
+
+
+    
+    $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments','newacct','nd','grandprev','begbalance','grandbalance'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
     return $pdf->stream('Notes Collection Report',array("Attachment"=>false));
 }
 
@@ -272,6 +310,127 @@ class ReportController extends Controller
         $pdf = PDF:: loadView('content.reports.dcr',compact('areas','payments','date', 'summary'))->setOptions(['defaultFont' => 'sans-serif']);
         return $pdf->stream('Daily Collection Reports.pdf',array("Attachment"=>false));
 
+    }
+
+
+     //Note Collection Reports
+    public function targetPerformance(Request $request)
+    {
+        //Note Collection Reports
+        function getWeek($y, $m, $d)
+        {
+            if($d >= 1 && $d <= 7)
+            {
+                if($m == 1)
+                {
+                    $y = $y - 1;
+                    $m = 13;
+                }
+                $m = $m - 1;
+                $c = date('t',strtotime($y ."-". $m ."-". "1"));
+                return ($y ."-". $m ."-". $c);
+            }
+            else if($d >= 8 && $d <= 15)
+            {
+                return ($y ."-". $m ."-". "7");
+            }
+            else if($d >= 16 && $d <= 23)
+            {
+                return ($y ."-". $m ."-". "15");
+            }
+            else if($d >= 24)
+            {		
+                return ($y ."-". $m ."-". "23");
+            }
+            else
+            {
+                return "";
+            }
+        }
+        $areas = Area::where('is_active','1')->orderby('category','asc')->orderby('name','asc')->get();
+        $t_due = 0;
+        $t_overdue = 0;
+        $t_dueplusod = 0;
+        $t_payment = 0;
+        $t_paymentAdvance = 0;
+        $t_percent = 0;
+        $t_total = 0;
+
+        $g_due = 0;
+        $g_overdue = 0;
+        $g_dueplusod = 0;
+        $g_payment = 0;
+        $g_paymentAdvance = 0;
+        $g_percent = 0;
+        $g_total = 0;
+
+        $begindate=$request->from;
+        $enddate=$request->to;
+
+        $ctr = abs(strtotime($begindate) - strtotime($enddate))/86400 + 1;
+        $tempdate = $begindate;
+        
+        $d = date('d',strtotime($begindate));
+        $y = date('Y',strtotime($begindate));
+        $m = date('m',strtotime($begindate));
+        $newdate = getWeek($y,$m, $d);
+        $newdate = date('Y-m-d', strtotime($newdate));
+        $bd = date('Y-m-d', strtotime($begindate));
+        $nd = date('Y-m-d', strtotime($newdate));
+        $ed = date('Y-m-d', strtotime($enddate));
+
+
+        $loans = Loan::where('close_date','<=',$nd)
+            ->orwhere('balance','>','0')
+            ->where('rel_date','<=', $ed)
+            ->with('payments')
+            ->get();
+
+        $payments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))
+                    ->wherehas('loan')
+                    ->get();
+
+        //getting the new account
+        $newacct = Loan::whereHas('client')
+                    ->whereBetween('rel_date', array($bd,$ed))->sum('principle_amount');
+
+        $Tpayments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))
+                    ->wherehas('loan' , function($query) use ($request)
+                    {
+                        $query->wherehas('client');
+                    })
+                    ->sum('amount');    
+        
+        $grandbalance = $loans->sum('principle_amount') - $Tpayments;
+
+
+
+        //getting the previous balance
+        $grandprev =  Prevbal::where('date',$nd)->pluck('amount')->first();
+        $prevdate = 0;
+        $qprevtemp = Prevbal::where('date',$ed)->pluck('id')->first();
+        if($qprevtemp != 0){
+            Prevbal::where('id',$qprevtemp)
+                ->update([
+                    'amount' => $grandbalance,
+                ]);
+        }
+        else{
+            Prevbal::create([
+                'area' => $request->area,
+                'date' => $ed,
+                'amount' => $grandbalance,
+                ]);
+        }
+
+        $begbalance = $newacct + $grandprev;
+        
+        //end of getting the previous balance	
+
+
+        
+        $pdf = PDF::loadView('content.reports.target',compact('areas','begindate','enddate','loans','payments','newacct','nd','grandprev','begbalance','grandbalance'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
+        return $pdf->stream('Notes Collection Report',array("Attachment"=>false));
     }
 
 

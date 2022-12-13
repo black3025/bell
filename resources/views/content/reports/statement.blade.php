@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Daily Collection Report</title>   
+    <title>Statement of Account</title>   
     <style>
         .mb-1{
             margin-bottom:1px;

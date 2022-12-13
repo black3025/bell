@@ -1,6 +1,6 @@
 @extends('layouts/loginMaster')
 
-@section('title', 'Login Basic - Pages')
+@section('title', 'Authentication - Login')
 
 @section('page-style')
 <!-- Page -->
