@@ -166,15 +166,7 @@ class ReportController extends Controller
                             { $query->where('area_id',$request->area); })
                 ->whereBetween('rel_date', array($bd,$ed))->sum('principle_amount');
 
-    $Tpayments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))
-                ->wherehas('loan' , function($query) use ($request)
-                {
-                    $query->wherehas('client', function($query) use ($request)
-                    {
-                        $query->where('area_id', $request->area);
-                    });
-                })
-                ->sum('amount');    
+    $Tpayments = $payments->sum('amount');    
     
     $grandbalance = $loans->sum('principle_amount') - $Tpayments;
 
@@ -313,10 +305,9 @@ class ReportController extends Controller
     }
 
 
-     //Note Collection Reports
+     //TARGET PERFORMANCE
     public function targetPerformance(Request $request)
     {
-        //Note Collection Reports
         function getWeek($y, $m, $d)
         {
             if($d >= 1 && $d <= 7)
@@ -347,7 +338,8 @@ class ReportController extends Controller
                 return "";
             }
         }
-        $areas = Area::where('is_active','1')->orderby('category','asc')->orderby('name','asc')->get();
+        
+
         $t_due = 0;
         $t_overdue = 0;
         $t_dueplusod = 0;
@@ -378,58 +370,183 @@ class ReportController extends Controller
         $bd = date('Y-m-d', strtotime($begindate));
         $nd = date('Y-m-d', strtotime($newdate));
         $ed = date('Y-m-d', strtotime($enddate));
+        $output = [];
+        $t_output =[];
+        $g_output = [];
 
+        $due = 0;
+        $overdue = 0;
+        $dueplusod = 0;
+        $payment = 0;
+        $advance = 0;
+        $percent = 0;
+        $total = 0;
 
-        $loans = Loan::where('close_date','<=',$nd)
-            ->orwhere('balance','>','0')
-            ->where('rel_date','<=', $ed)
-            ->with('payments')
-            ->get();
-
-        $payments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))
-                    ->wherehas('loan')
+        $areas = Area::where('is_active','1')->orderby('category','asc')->orderby('name','asc')->get();
+        
+        foreach($areas as $area)
+        {
+            $grandtotal = 0;
+            $granddue = 0;
+            $grandoverdue = 0;
+            $grandadvance = 0; 
+            $grandbalance = 0; 
+            $dueplusod = 0;
+            $percent = 0;
+            
+            $loans = Loan::where('close_date','<=',$nd)
+                    ->orwhere('balance','>','0')
+                    ->where('rel_date','<=', $ed)
+                    ->wherehas('client', function($query) use ($area)
+                    {
+                        $query->where('area_id', $area->id);
+                    })
+                    ->orderBy(
+                        Client::select('account_name')
+                        ->whereColumn('clients.id', 'loans.client_id')
+                    )->with('payments')
                     ->get();
 
-        //getting the new account
-        $newacct = Loan::whereHas('client')
-                    ->whereBetween('rel_date', array($bd,$ed))->sum('principle_amount');
+            foreach($loans as $loan)
+            {
+                
+                $reldate = $loan->rel_date;
+                $enddate = $loan->end_date;
+                $daily = $loan->principle_amount * 0.01;
+                $pamount = $loan->principle_amount;
+                $daycount = 100 - round((strtotime($ed) - strtotime($reldate))/86400);
+                
+                if($daycount > 100)
+                    $daycount = 100;
+                    
+                $count = round(abs(strtotime($nd) - strtotime($reldate))/86400);
 
-        $Tpayments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))
-                    ->wherehas('loan' , function($query) use ($request)
-                    {
-                        $query->wherehas('client');
-                    })
-                    ->sum('amount');    
-        
-        $grandbalance = $loans->sum('principle_amount') - $Tpayments;
+                              
+                //total for all the TP inclusive dates
+                $total=$loan->payments->whereBetween('date',array($bd,$ed))->sum('amount');
 
+                $grandbalance += ($pamount - $loan->payments->sum('amount'));
+                
+                $grandtotal += $total;
+                
+                $totalpayment = 0;
+                $advance = 0;
+                $overdue = 0;
+                //computing of due
+                if($reldate >= $bd && $reldate <= $ed)
+                    $due = (round(abs(strtotime($reldate) - strtotime($ed))/86400) * $daily);    
+                elseif($enddate <= $ed && $enddate >= $bd )
+                    $due = (round(abs(strtotime($enddate) - strtotime($bd))/86400) * $daily);
+                else 
+                    $due = (round(abs(strtotime($bd) - strtotime($ed))/86400 + 1) * $daily);
+                
+                if($loan->end_date < $begindate || $loan->rel_date > $enddate)
+                    $due = 0;
+                
+                //overdue
+                $totalpayment = $loan->payments->where('date','<=',$nd)->sum('amount');
+                if($count >= 100)
+                    $count = 100;
+                
+                if($reldate >= $begindate || ($reldate >= $begindate && $reldate <= $enddate))
+                    $overdue = 0;
+                else	
+                    $overdue = ($daily * $count) - $totalpayment;
+                
+                if($overdue <= 0)
+                {
+                    $due = $due + $overdue;
+                    if($due <= 0)
+                        $due = 0;
+                    $overdue = 0;
+                }
 
+                $advance = $total - $overdue - $due;
+                if($advance <= 0)
+                    $advance = 0;
 
-        //getting the previous balance
-        $grandprev =  Prevbal::where('date',$nd)->pluck('amount')->first();
-        $prevdate = 0;
-        $qprevtemp = Prevbal::where('date',$ed)->pluck('id')->first();
-        if($qprevtemp != 0){
-            Prevbal::where('id',$qprevtemp)
-                ->update([
-                    'amount' => $grandbalance,
-                ]);
+                $grandadvance += $advance;
+                $grandoverdue += $overdue;
+                $granddue += $due;
+            }
+            
+            $dueplusod = $grandtotal - $grandadvance;
+
+            if($dueplusod <= 0){
+                $dueplusod = 0;
+            }
+            
+            if(($granddue + $grandoverdue) == 0 ){
+                $percent = 0;
+            }
+            else {
+                $percent = ($dueplusod) / ($granddue + $grandoverdue) * 100;
+            }
+
+            if($area->category == 1)
+            {
+                $t_due = $t_due + $granddue;
+                $t_overdue = $t_overdue + $grandoverdue;
+                $t_dueplusod = $t_dueplusod + ($grandoverdue + $granddue);
+                $t_payment = $t_payment+ $dueplusod;
+                $t_paymentAdvance = $t_paymentAdvance+ $grandadvance;
+                $t_total = $t_total + $grandtotal;
+            }
+
+            $g_due = $g_due + $granddue;
+            $g_overdue = $g_overdue + $grandoverdue;
+            $g_dueplusod = $g_dueplusod + ($grandoverdue + $granddue);
+            $g_payment = $g_payment + $dueplusod;
+            $g_paymentAdvance = $g_paymentAdvance + $grandadvance;
+            $g_total = $g_total + $grandtotal;
+
+            array_push($output, [
+                        "area"=>$area->name,
+                        "due"=>$granddue, 
+                        "overdue"=>$grandoverdue, 
+                        "dueplusod" =>$grandoverdue + $granddue, 
+                        "payment"=>$dueplusod, 
+                        "Apayment"=>$grandadvance, 
+                        "percent"=>$percent, 
+                        "total"=>$grandtotal
+            ]);
         }
-        else{
-            Prevbal::create([
-                'area' => $request->area,
-                'date' => $ed,
-                'amount' => $grandbalance,
-                ]);
-        }
 
-        $begbalance = $newacct + $grandprev;
+        //compute percent for Regular Area
+        if(($t_due + $t_overdue) == 0 )
+            $t_percent = 0;
+        else 
+            $t_percent = ($t_payment) / ($t_due + $t_overdue) * 100;
+        array_push($t_output,[
+            "due"=>$t_due, 
+            "overdue"=>$t_overdue, 
+            "dueplusod" =>$t_dueplusod, 
+            "payment"=>$t_payment, 
+            "Apayment"=>$t_paymentAdvance, 
+            "percent"=>$t_percent, 
+            "total"=>$t_total
+        ]);
+
+         //compute percent for Regular + Special Area
+         if(($g_due + $g_overdue) == 0 )
+            $g_percent = 0;
+        else 
+             $g_percent = ($g_payment) / ($g_due + $g_overdue) * 100;
+        array_push($g_output,[
+            "due"=>$g_due, 
+            "overdue"=>$g_overdue, 
+            "dueplusod" =>$g_dueplusod, 
+            "payment"=>$g_payment, 
+            "Apayment"=>$g_paymentAdvance, 
+            "percent"=>$g_percent, 
+            "total"=>$g_total
+        ]);
+
+
+
+
         
-        //end of getting the previous balance	
-
-
-        
-        $pdf = PDF::loadView('content.reports.target',compact('areas','begindate','enddate','loans','payments','newacct','nd','grandprev','begbalance','grandbalance'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadView('content.reports.target',compact('areas','begindate','enddate','loans','nd','output','t_output','g_output'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
         return $pdf->stream('Notes Collection Report',array("Attachment"=>false));
     }
 

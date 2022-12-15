@@ -35,7 +35,7 @@
                 <tr><td><b>Area: </b>{{$area->name}}</td> <td align="right">Report Generated: {{date('F d, Y')}}</td>
             </table>
             </b><br>
-            <table border='0.5' padding='0.2' width="100%" cellspacing='0'>
+            <table border='0.5' cellpadding='0.7' width="100%" cellspacing='0'>
                 <thead>
                     <tr class="table-danger">
                         <th width="30"><b>Acct#</b></th>
@@ -74,6 +74,7 @@
 
                             //days
                             $daycount = 100 - round((strtotime($enddate) - strtotime($loan->rel_date))/86400);
+                            
                             //total for all the NCR inclusive dates
                              $total = $loan->payments->whereBetween('date',array($begindate,$enddate))->sum('amount');
 
@@ -113,7 +114,7 @@
                             }
 
                             //computing the current balance
-                            $tpay = $loan->payments->where('date','<=',$enddate)->sum('amount');	
+                            //$tpay = $loan->payments->where('date','<=',$enddate)->sum('amount');	
                             $balance = $loan->principle_amount - $tpay;
 
                             //collectibles
