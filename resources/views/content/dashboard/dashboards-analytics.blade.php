@@ -15,25 +15,95 @@
 @endsection
 
 @section('content')
-<div class="row">
-  <div class="col-lg-8 mb-4 order-0">
-    <div class="card">
-      <div class="d-flex align-items-end row">
-        <div class="col-sm-7">
-          <div class="card-body">
-            <h5 class="card-title text-primary">Congratulations {{Auth::user()->name}} 🎉</h5>
-            <p class="mb-4">You have done <span class="fw-bold">72%</span> more sales today. Check your new badge in your profile.</p>
 
-            <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Badges</a>
-          </div>
-        </div>
-        <div class="col-sm-5 text-center text-sm-left">
-          <div class="card-body pb-0 px-0 px-md-4">
-            <img src="{{asset('assets/img/illustrations/man-with-laptop-light.png')}}" height="140" alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png">
+ @php $collectP =  ($daily_collection/$rem_collection)*100; @endphp
+  <div class="row">
+      <div class="col-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <i class='bx bx-user' ></i>
+              </div>
+              <div class="dropdown">
+                <button class="btn p-0" type="button" id="cardOpt1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="cardOpt1">
+                  <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                  <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                </div>
+              </div>
+            </div>
+            <span class="fw-semibold d-block mb-1">Clients</span>
+            <h3 class="card-title mb-2">{{$client_count}}</h3>
+            <small class="text-success fw-semibold"><i class='bx bx-up-arrow-alt'></i> +28.14%</small>
           </div>
         </div>
       </div>
-    </div>
-</div> 
-</div>
+
+
+      <div class="col-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="{{asset('assets/img/icons/unicons/cc-primary.png')}}" alt="Credit Card" class="rounded">
+              </div>
+              <div class="dropdown">
+                <button class="btn p-0" type="button" id="cardOpt1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="cardOpt1">
+                  <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                  <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                </div>
+              </div>
+            </div>
+            <span class="fw-semibold d-block mb-1">Today's Collection</span>
+            <h3 class="card-title mb-2">&#8369; {{number_format($daily_collection)}}</h3>
+            
+            @if($collectP > 90)
+                <small class="text-success fw-semibold">
+                   <i class='bx bx-up-arrow-alt'></i>
+            @elseif($collectP >= 50)
+                <small class="text-information fw-semibold">
+                    <i class='bx bx-chevron-right'></i>
+            @elseif($collectP >=20)
+                <small class="text-warning fw-semibold">
+                    <i class='bx bx-chevron-right'></i>
+            @else
+                 <small class="text-danger fw-semibold">
+                    <i class='bx bx-chevron-down' ></i>
+            @endif
+                  {{ number_format($collectP,2)  }} %
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="card-title d-flex align-items-start justify-content-between">
+              <div class="avatar flex-shrink-0">
+                <img src="{{asset('assets/img/icons/unicons/cc-primary.png')}}" alt="Credit Card" class="rounded">
+              </div>
+              <div class="dropdown">
+                <button class="btn p-0" type="button" id="cardOpt1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="bx bx-dots-vertical-rounded"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="cardOpt1">
+                  <a class="dropdown-item" href="javascript:void(0);">View More</a>
+                  <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+                </div>
+              </div>
+            </div>
+            <span class="fw-semibold d-block mb-1">Non Paying</span>
+            <h3 class="card-title mb-2">&#8369; {{number_format($rem_collection)}}</h3>
+            <small class="text-success fw-semibold"><i class='bx bx-up-arrow-alt'></i> +28.14%</small>
+          </div>
+        </div>
+      </div>
+  </div>
 @endsection

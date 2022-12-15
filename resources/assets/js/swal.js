@@ -1,27 +1,25 @@
-success(msg)
-{
-    Swal.fire(
-        'Success!',
-        msg,
-        'success'
-      )
+function success(msg){
+	Swal.fire(
+		'Success',
+		msg,
+		'success'
+	  )
 }
 
-error(msg)
-{
-    Swal.fire({
-        icon: 'error',
-        title: 'Something went wrong!',
-        text: msg,
-      })
-
+function error(msg){
+	Swal.fire({
+		title: 'Error!',
+		text: msg,
+		icon: 'error',
+		confirmButtonText: 'OK'
+	})
 }
 
-warning(msg)
-{
-    Swal.fire({
-        icon: 'warning',
-        title: 'Something went wrong!',
-        text: msg,
-      })
+function warning(msg){
+	Swal.fire({
+		title: 'Unable to process!',
+		text: msg,
+		icon: 'warning',
+		confirmButtonText: 'Proceed'
+	})
 }
