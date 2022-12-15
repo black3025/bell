@@ -20,10 +20,8 @@ Route::middleware('auth')->group(function () {
        
         // Main Page Route
         Route::get('/', $controller_path . '\dashboard\Analytics@index')->name('dashboard');
-
         //Clients
         Route::resource('clients',$controller_path.'\ClientController',['names'=>'clients']);
-
         //loans
         Route::resource('loans', $controller_path.'\LoanController',['names'=>'loans']);
         Route::post('/loans/updateLoan',$controller_path.'\LoanController@updateLoan');
@@ -31,20 +29,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('payments', $controller_path.'\PaymentController',['names'=>'payments']);
         Route::post('/payments/pay', $controller_path.'\PaymentController@pay')->name('payments.index');
         Route::get('/payments/post', $controller_path.'\PaymentController@postPay')->name('payments.index');
-
+         //reports
+         Route::resource('reports',$controller_path.'\ReportController',['names'=>'reports']);
         
-        Route::post('/users/updatePass',$controller_path.'\UserController@updatePass');
-
-
-        //admin only
-        Route::resource('users', $controller_path.'\UserController',['names'=>'users']);
-        Route::get('users/status_change/{id}',$controller_path.'\UserController@status');
-        Route::get('users/resetPW/{id}',$controller_path.'\UserController@resetPW');
-        Route::resource('roles', $controller_path.'\RoleController',['names'=>'roles']);
-        Route::get('roles/status_change/{id}',$controller_path.'\RoleController@status');
-        Route::post('roles/update/{id}',$controller_path.'\RoleController@updateR');
-        Route::resource('reports',$controller_path.'\ReportController',['names'=>'reports']);
-
+        
         //reports
         Route::post('/report/daily',$controller_path.'\ReportController@dcrAll');
         Route::post('/report/dailyNo',$controller_path.'\ReportController@dailyNo');
@@ -52,6 +40,22 @@ Route::middleware('auth')->group(function () {
         Route::post('/report/newAccount', $controller_path.'\ReportController@newAccount');
         Route::post('/report/ncr', $controller_path.'\ReportController@ncr');
         Route::post('/report/targetPerformance',$controller_path.'\ReportController@targetPerformance');
+        
+        //admin only
+        Route::resource('users', $controller_path.'\UserController',['names'=>'users']);
+        //admin-users
+        Route::get('users/status_change/{id}',$controller_path.'\UserController@status');
+        Route::get('users/resetPW/{id}',$controller_path.'\UserController@resetPW');
+        Route::post('/users/updatePass',$controller_path.'\UserController@updatePass');
+        //admin-role
+        Route::resource('roles', $controller_path.'\RoleController',['names'=>'roles']);
+        Route::get('roles/status_change/{id}',$controller_path.'\RoleController@status');
+        Route::post('roles/update/{id}',$controller_path.'\RoleController@updateR');
+        //admin-area
+        Route::resource('areas',$controller_path.'\AreaController',['names'=>'areas']);
+        Route::get('areas/status_change/{id}',$controller_path.'\AreaController@status');
+        Route::post('areas/update/{id}',$controller_path.'\AreaController@updateR');
+       
 });
 
 // authentication

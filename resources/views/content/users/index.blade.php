@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Loans')
+@section('title', 'Users')
 
 @section('page-style')
   <link rel="stylesheet" type="text/css" href="{{ asset('assets/DataTables/datatables.min.css') }}"/>
@@ -33,7 +33,7 @@
             <div style="display:flex; justify-content: space-between;">
                 Users
                 <button type="button" class="btn rounded-pill btn-primary" data-bs-toggle="modal" data-bs-target="#addUser">
-                <span class="tf-icons bx bx-user-plus"></span>&nbsp; Add new user
+                <span class="tf-icons bx bx-user-plus"></span>&nbsp; Add new User
               </button>
             </div>
         </h5>

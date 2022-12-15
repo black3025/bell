@@ -14,7 +14,45 @@ class AreaController extends Controller
      */
     public function index()
     {
-        //
+        $areas = Area::all();
+        return view('content.areas.index',compact('areas'));
+    }
+
+    public function updateR(Request $request, $id)
+    {
+        $Area = Area::where('id', $id)->first();
+
+        $Area->update([
+            'name'=> $request->name,
+            'category' =>$request->category
+        ]);
+
+        if($Area)
+            return ['success'=>true,'message'=> 'Area updated.'];
+        else
+            return ['success'=>false,'message'=> 'Something went wrong please contact the administrator.'];
+    }
+
+
+
+    public function status($id)
+    {
+        if( Area::where('id',$id)->pluck('is_active')->first() == 1 )
+        {
+            $update = Area::where('id',$id)->update(['is_active'=>0]);
+            if($update)
+                return ['success'=>true,'message'=> 'Area deactivated.'];
+            else
+                return ['success'=>false,'message'=> 'Something went wrong please contact the administrator.'];
+        }else{
+            $update = Area::where('id',$id)->update(['is_active'=>1]);
+            if($update)
+                return ['success'=>true,'message'=> 'Area reactivated.'];
+            else
+               return ['success'=>false,'message'=> 'Something went wrong please contact the administrator.'];
+        }
+
+        return ['success'=>false,'message'=>  $id];
     }
 
     /**
@@ -35,7 +73,11 @@ class AreaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $add= Area::create($request->all());
+        if($add)
+            return ['success'=>true,'message'=> 'Area added.'];
+        else
+            return ['success'=>false, 'message'=> 'Something went wrong please contact the administrator.'];
     }
 
     /**
