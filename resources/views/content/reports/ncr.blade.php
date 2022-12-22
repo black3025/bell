@@ -46,8 +46,8 @@
                         @endfor
                         <th width="35"><b>Total</b></th>
                         <th width="40"><b>D</b></th>
-                        <th width="32"><b>AR</b></th>
-                        <th width="40"><b>D+AR</b></th>
+                        <th width="32"><b>O</b></th>
+                        <th width="40"><b>D+O</b></th>
                         <th width="45"><b>CB</b></th>
                         <th width="32"><b>AM</b></th>
                         <th width="32"><b>LPD</b></th>
