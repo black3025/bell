@@ -16,7 +16,13 @@
 
 @section('content')
 
- @php $collectP =  ($daily_collection/$rem_collection)*100; @endphp
+ @php 
+    if($collectP !=0)
+      $collectP =  ($daily_collection/$rem_collection)*100; 
+    else
+      $collectP = 0;
+ 
+ @endphp
   <div class="row">
       <div class="col-4 mb-4">
         <div class="card">
