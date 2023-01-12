@@ -38,7 +38,7 @@
          var form = {
             _token: $('input[name=_token]').val(),
             name: $('#name').val(),
-            restriction: $('#restriction').val(),
+            category: $('#restriction').val(),
             is_active : 1,
             ajax: 1
          }
