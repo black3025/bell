@@ -20,6 +20,7 @@
               </h5>
               <div class="card-body">
               <a class="dropdown-item" href="javascript:void(0);" onclick="dcr()">Daily Collection Report</a>
+              <a class="dropdown-item" href="javascript:void(0);" onclick="dcp({{$areas}})">Daily Collection Printable</a>
               <a class="dropdown-item" href="javascript:void(0);" onclick="soa({{$clients}})">Statement of Account</a>
               <a class="dropdown-item" href="javascript:void(0);" onclick="newAcct()">New Accounts</a>
               <a class="dropdown-item" href="javascript:void(0);" onclick="npcr({{$areas}})">Non Paying</a>
@@ -37,6 +38,20 @@
       $('#main').append("<div id='appending' class='card mb-4 col-md-6' ><h5 style='display:flex; justify-content:space-between' class='card-header'>Daily Collection Report</h5><div id='apbody' class='card-body'></div></div>");
       $('#apbody').append("<form target='_blank' id='apForm' method='POST' action='/report/daily'></form>");
       $('#apForm').append("<input type='hidden' name='_token' value='{{ csrf_token() }}'><div class='row mb-2'><label for='date' class='col-sm-2 col-form-label'>Date</label><div class='col-sm-10'><input value='{{date('Y-m-d')}}' class='form-control' required type='date' name='date' id='date'/></div></div>");
+      $('#apForm').append("<div class='modal-footer'><button class='btn btn-primary' type='submit'>Generate</button></div>");
+    }
+
+    function dcp(areas)
+    {
+      $('#appending').remove();
+      $('#main').append("<div id='appending' class='card mb-4 col-md-6' ><h5 style='display:flex; justify-content:space-between' class='card-header'>Daily Collection Printable</h5><div id='apbody' class='card-body'></div></div>");
+      $('#apbody').append("<form target='_blank' id='apForm' method='POST' action='/report/dailyPrint'></form>");
+      $('#apForm').append("<input type='hidden' name='_token' value='{{ csrf_token() }}'><div class='row mb-2'><label for='date' class='col-sm-2 col-form-label'>Date</label><div class='col-sm-10'><input value='{{date('Y-m-d')}}' class='form-control' required type='date' name='date' id='date'/></div></div>");
+      $('#apForm').append("<div class='row mb-2'><label for='area' class='col-sm-2 col-form-label'>Area: </label><div class='col-sm-10'><select class='form-control'required name='area' id='area'><option value=''>Select Area</option></select></div></div>");
+      for(i=0; i<areas.length; i++)
+      {
+          $('#area').append('<option value='+ areas[i]['id'] +'>'+ areas[i]['name'] +'</option>');
+      }
       $('#apForm').append("<div class='modal-footer'><button class='btn btn-primary' type='submit'>Generate</button></div>");
     }
 

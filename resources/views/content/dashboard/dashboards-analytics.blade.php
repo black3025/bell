@@ -17,7 +17,7 @@
 @section('content')
 
  @php 
-    if($collectP !=0)
+    if($rem_collection !=0)
       $collectP =  ($daily_collection/$rem_collection)*100; 
     else
       $collectP = 0;

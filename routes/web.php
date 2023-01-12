@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
         
         //reports
         Route::post('/report/daily',$controller_path.'\ReportController@dcrAll');
+        Route::post('/report/dailyPrint',$controller_path.'\ReportController@dailyPrint');
         Route::post('/report/dailyNo',$controller_path.'\ReportController@dailyNo');
         Route::post('/report/SOA', $controller_path.'\ReportController@SOA');
         Route::post('/report/newAccount', $controller_path.'\ReportController@newAccount');

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Notes Collection Report</title>   
+    <title>New Collection Report</title>   
     <style>
         .mb-1{
             margin-bottom:1px;
@@ -23,7 +23,7 @@
         <table width="100%">
             <tr>
                 <td align="center" style="font-size:1rem; font-weight:bold">
-                    Notes Collection Report
+                    New Collection Report
                 </td>
             </tr>
             <tr>
@@ -35,21 +35,23 @@
                 <tr><td><b>Area: </b>{{$area->name}}</td> <td align="right">Report Generated: {{date('F d, Y')}}</td>
             </table>
             </b><br>
-            <table border='0.5' cellpadding='0.7' width="100%" cellspacing='0'>
+            <table border='0.5' cellpadding='1' width="100%" cellspacing='0'>
                 <thead>
                     <tr class="table-danger">
-                        <th width="30"><b>Acct#</b></th>
-                        <th width="100"><b>Account Name</b></th>
+                        <th width="35"><b>Acct#</b></th>
+                        <th width="90"><b>Account Name</b></th>
                         <th width="10"><b>#</b></th>
                         @for($day = $begindate; $day <= $enddate; $day++ )
                             <th width="35"><b>{{date('d',strtotime($day))}}</b></th>
                         @endfor
                         <th width="35"><b>Total</b></th>
                         <th width="40"><b>D</b></th>
+                         <th width="40"><b>CD</b></th>
                         <th width="32"><b>O</b></th>
                         <th width="40"><b>D+O</b></th>
-                        <th width="45"><b>CB</b></th>
-                        <th width="32"><b>AM</b></th>
+                        <th width="35"><b>CB</b></th>
+                        {{-- <th width="32"><b>AM</b></th> --}}
+                        <th width="32"><b>MD</b></th>
                         <th width="32"><b>LPD</b></th>
                         <th width="15"><b>RD</b></th>
                     </tr>
@@ -138,12 +140,12 @@
                             $grandAM += $daily;  
                         @endphp
                         <tr>
-                            <td width="30">{{$loan->client->client_id}}</td>
-                            <td width="100">{{$loan->client->account_name}}</td>
-                            <td width="10" align="center">{{$loan->cycle}}</td>
+                            <td>{{$loan->client->client_id}}</td>
+                            <td>{{$loan->client->account_name}}</td>
+                            <td align="center">{{$loan->cycle}}</td>
                             @for($day = $begindate; $day <= $enddate; $day++ )
                             
-                                <td width="35" align="right">
+                                <td align="right">
                                     @php $data = $loan->payments->where('date',$day)->pluck('amount')->first();  $sum = 0;@endphp
                                     @if($data)
                                         {{ number_format( $data )}}
@@ -152,40 +154,47 @@
                                     @endif
                                 </td>
                             @endfor
-                            <td width="35" align="right">
+                            <td align="right">
                                 {{number_format($total)}}
                             </td>
-                            <td width="40" align="right">
+                            <td align="right">
                                 {{number_format($due)}}
                             </td>
-                            <td width="32" align="right">{{number_format($overdue)}}</td>
-                            <td width="40" align="right">{{number_format($collectibles)}}</td>
-                            <td width="45" align="right">{{number_format($balance)}}</td>
-                            <td width="32" align="right">{{number_format($daily)}}</td>
-                            <td width="32" align="right">
+                             <td align="right">
+                                {{number_format($due-$total)}}
+                            </td>
+                            <td align="right">{{number_format($overdue)}}</td>
+                            <td align="right">{{number_format($collectibles)}}</td>
+                            <td align="right">{{number_format($balance)}}</td>
+                            {{-- <td width="32" align="right">{{number_format($daily)}}</td> --}}
+                            <td align="right">
+                                {{date('m-d-y', strtotime($loan->end_date)) }}
+                            </td>
+                            <td align="right">
                                 @if($loan->payments->max('date'))
-                                    {{date('m-d-Y',strtotime($loan->payments->max('date'))) }}
+                                    {{date('m-d-y',strtotime($loan->payments->max('date'))) }}
                       
                                 @endif
                             </td>
-                            <td width="15" align="right">{{$daycount}}</td>
+                            <td align="right">{{$daycount}}</td>
                         </tr>
                     @endforeach
                         <tr style="font-weight:bold">
                             <td>Count: {{$loans->count() }}</td>
                             <td align="center" colspan="2">Total: </td>
                             @for($day = $begindate; $day <= $enddate; $day++)
-                                <td width="35" align="right">
+                                <td align="right">
                                    {{$payments->where('date', $day)->sum('amount')}}
                                 </td>
                             @endfor
                             <td align="right">{{number_format($payments->sum('amount'))}}</td>
                             <td align="right">{{number_format($granddue)}}</td>
+                            <td align="right">{{number_format($granddue - $payments->sum('amount'))}}</td>
                             <td align="right">{{number_format($grandoverdue)}}</td>
                             <td align="right">{{number_format($grandcoll)}}</td>
                             <td align="right">{{number_format($grandbalance)}}</td>
-                            <td align="right">{{number_format($grandAM)}}</td>
-                            <td align="right" colspan="2"> </td>
+                            {{-- <td align="right">{{number_format($grandAM)}}</td> --}}
+                            <td align="right" colspan="3"> </td>
                         </tr>                
                 </tbody>
             </table>

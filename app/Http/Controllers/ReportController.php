@@ -197,11 +197,31 @@ class ReportController extends Controller
 
     
     $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments','newacct','nd','grandprev','begbalance','grandbalance'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
-    return $pdf->stream('Notes Collection Report',array("Attachment"=>false));
+    return $pdf->stream('New Collection Report',array("Attachment"=>false));
 }
 
 
+public function dailyPrint(Request $request)
+{
+    $area = Area::where('id',$request->area)->pluck('name')->first();
 
+    $loans = Loan::where('rel_date','<=',date('Y-m-d', strtotime($request->payday)))
+                ->where('balance','>','0')
+                ->wherehas('client', function($query) use ($request)
+                    {
+                        $query->where('area_id', $request->area);
+                    })
+                ->orderBy(
+                    Client::select('account_name')
+                            ->whereColumn('clients.id', 'loans.client_id')
+                )->with('payments', function($query) use($request)
+                    {
+                        $query->where('date',date('Y-m-d', strtotime($request->payday)));
+                    }
+                )
+                ->get();
+    return view('content.payments.pay', ['date'=>$request->payday, 'area'=>$area, 'loans'=>$loans]);
+}
 
 
 
