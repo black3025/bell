@@ -22,6 +22,7 @@ class Client extends Model
         'income',
         'is_active',
         'area',
+        'pic',
     ];
 
     public function loans(){

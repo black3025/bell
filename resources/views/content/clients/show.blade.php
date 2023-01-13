@@ -19,8 +19,9 @@
       <!-- Account -->
       <div class="card-body">
         <div class="d-flex align-items-start align-items-sm-center gap-4">
-          <img src="{{asset('assets/img/avatars/1.png')}}" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
+          <img src="{{asset('assets/img/avatars/') .'/'. $client->pic}}" alt="user-avatar" class="d-block rounded" height="100" width="100" id="uploadedAvatar" />
           <div class="button-wrapper">
+            <form id="editProfile" onsubmit="return updateForm();">
             <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
               <span class="d-none d-sm-block">Upload new photo</span>
               <i class="bx bx-upload d-block d-sm-none"></i>
@@ -37,7 +38,7 @@
       </div>
       <hr class="my-0">
       <div class="card-body">
-        <form id="editProfile" onsubmit="return updateForm();">
+        
         @csrf
         <div class="row mb-2" >
                 <input hidden tabindex="-1"  class="form-control" id="account_name" name="account_name" value="{{$client->account_name}}" required>
@@ -207,6 +208,9 @@
 	         url : "{{route('clients.update',$client->id)}}",
 	         data :  form,
 	         type : "PATCH",
+             cache: false,
+             contentType: false,
+             processData: false,
 	         success : function(msg){
                 console.log(msg);
                 if(msg['success']){

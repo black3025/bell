@@ -157,6 +157,12 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
+        
+        $name = $request->file('pic')->getClientOriginalName();
+ 
+        $request->file('pic')->store('public/assets/img/avatars');
+        
+
         if( Client::where('account_name',$request['account_name'])->where('id','<>',$client->id)->count() > 0)
             return ['success'=>false, 'message'=>'Account name already exist.'];
         else{
@@ -170,6 +176,7 @@ class ClientController extends Controller
                 'contact_number'=> $request->contact_number,
                 'area_id'=> $request->area,
                 'address'=> $request->address,
+                'pic'=> $name
             ]);
             if($clientUpdate)
             {

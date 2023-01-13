@@ -203,7 +203,11 @@
             <br>BEGINNING BALANCE: P {{number_format($begbalance,2)}}
             <br>NEW ACCOUNT: P {{number_format($newacct,2,'.',',')}}
             <br>NO. OF NEW ACCOUNT: {{$newacctCount}}
-            <br><br>COLLECTION PERFORMANCE: {{($payments->sum('amount') / ($granddue + $grandoverdue)) *100}}%
+            <br><br>COLLECTION PERFORMANCE: 
+                            @if( ( $granddue + $grandoverdue)!=0 ){{($payments->sum('amount') / ($granddue + $grandoverdue)) *100}} %
+                            @else
+                                N/A
+                            @endif
             <br>(1%) : P {{number_format($grandcoll * 0.01, 2,'.',',')}}
 
             <br><br>
