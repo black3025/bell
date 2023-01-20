@@ -88,10 +88,10 @@ class ReportController extends Controller
     }
 
 
- //Note Collection Reports
+ //New Collection Reports
  public function NCR(Request $request)
  {
-    //Note Collection Reports
+    //New Collection Reports
     function getWeek($y, $m, $d)
     {
         if($d >= 1 && $d <= 7)
@@ -124,7 +124,6 @@ class ReportController extends Controller
     }
     $begindate = $request->from;
     $enddate = $request->to;
-
     $ctr = abs(strtotime($begindate) - strtotime($enddate))/86400 + 1;
     $tempdate = $begindate;
     
@@ -165,6 +164,9 @@ class ReportController extends Controller
     $newacct = Loan::whereHas('client',function($query) use($request)
                             { $query->where('area_id',$request->area); })
                 ->whereBetween('rel_date', array($bd,$ed))->sum('principle_amount');
+    $newacctCount = Loan::whereHas('client',function($query) use($request)
+                { $query->where('area_id',$request->area); })
+    ->whereBetween('rel_date', array($bd,$ed))->count();
 
     $Tpayments = $payments->sum('amount');    
     
@@ -193,19 +195,18 @@ class ReportController extends Controller
     $begbalance = $newacct + $grandprev;
     
     //end of getting the previous balance	
-
-
     
-    $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments','newacct','nd','grandprev','begbalance','grandbalance'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
+    $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments','newacct','newacctCount','nd','grandprev','begbalance','grandbalance'))->setPaper('legal', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
     return $pdf->stream('New Collection Report',array("Attachment"=>false));
 }
 
-
+//daily Print
 public function dailyPrint(Request $request)
 {
+    $date = $request->date;
     $area = Area::where('id',$request->area)->pluck('name')->first();
 
-    $loans = Loan::where('rel_date','<=',date('Y-m-d', strtotime($request->payday)))
+    $loans = Loan::where('rel_date','<=',date('Y-m-d', strtotime($request->date)))
                 ->where('balance','>','0')
                 ->wherehas('client', function($query) use ($request)
                     {
@@ -216,11 +217,12 @@ public function dailyPrint(Request $request)
                             ->whereColumn('clients.id', 'loans.client_id')
                 )->with('payments', function($query) use($request)
                     {
-                        $query->where('date',date('Y-m-d', strtotime($request->payday)));
+                        $query->where('date',date('Y-m-d', strtotime($request->date)));
                     }
                 )
                 ->get();
-    return view('content.payments.pay', ['date'=>$request->payday, 'area'=>$area, 'loans'=>$loans]);
+    $pdf = PDF::loadView('content.reports.dPrint',compact('loans','area','date'))->setPaper('Folio')->setOptions(['defaultFont' => 'sans-serif']);
+    return $pdf->stream('Collection Printable',array("Attachment"=>false));
 }
 
 

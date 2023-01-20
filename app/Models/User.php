@@ -25,9 +25,6 @@ class User extends Authenticatable
         'first_name',
         'middle_name',
         'last_name',
-        'co_maker',
-        'co_address',
-        'co_number',
         'is_active'
     ];
 

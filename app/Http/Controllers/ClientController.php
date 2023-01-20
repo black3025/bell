@@ -159,7 +159,6 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-
         if( Client::where('account_name',$request->account_name)->where('id','<>',$client->id)->count() > 0){
             return ['success'=>false, 'message'=>'Account name already exist.'];
         }else{
@@ -174,8 +173,9 @@ class ClientController extends Controller
                 'co_address' => $request->co_address,
                 'contact_number'=> $request->contact_number,
                 'area_id'=> $request->area,
-                'address'=> $request->address,
+                'address'=> $request->address                
             ]);
+
             if($clientUpdate)
             {
                 return ['success'=>true, 'message'=>'Client '. $client->account_name. ' successfull updated.'];

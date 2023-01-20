@@ -20,8 +20,12 @@ class Client extends Model
         'contact_number',
         'business',
         'income',
+        'co_maker',
+        'co_address',
+        'co_number',
         'is_active',
         'area',
+        'pic',
     ];
 
     public function loans(){
