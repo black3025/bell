@@ -46,15 +46,6 @@
                 </div>
             </div>
             <div class="row mb-2">
-                <label for="income" class="col-sm-2 col-form-label">Income Source</label>
-                <div class="col-sm-10">
-                    <div class="input-group input-group-merge">
-                        <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-money"></i></span>
-                        <input type="text" id="income" name="income" class="form-control" placeholder="Other Source of Income">
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-2">
                 <label for="contact_number" class="col-sm-2 col-form-label">Mobile #</label>
                 <div class="col-sm-10">
                     <div class="input-group input-group-merge">
@@ -80,6 +71,38 @@
                     <div class="input-group input-group-merge">
                         <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-home"></i></span>
                         <input type="text" id="address" required name="address" class="form-control" placeholder="Complete address">
+                    </div>
+                </div>
+            </div>
+             <div class="divider">
+                <div class="divider-text">
+                    Co-Maker
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label for="co_maker" class="col-sm-2 col-form-label">Full Name</label>
+                <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-user"></i></span>
+                        <input type="text" id="co_maker" name="co_maker" class="form-control" placeholder="Name of Co-Maker">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label for="co_number" class="col-sm-2 col-form-label">Number</label>
+                <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                         <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-phone"></i></span>
+                        <input type="text" id="co_number" name="co_number" class="form-control" placeholder="Contact number of Co-Maker">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <label for="co_address" class="col-sm-2 col-form-label">Address</label>
+                <div class="col-sm-10">
+                    <div class="input-group input-group-merge">
+                        <span id="basic-icon-default-company2" class="input-group-text"><i class="bx bx-home"></i></span>
+                        <input type="text" id="co_address" name="co_address" class="form-control" placeholder="Address of Co-Maker">
                     </div>
                 </div>
             </div>
@@ -129,7 +152,9 @@
             address : $('#address').val(),
             business : $('#business').val(),
             area_id : $('#area').val(),
-            income : $('#income').val(),
+            co_maker : $('#co_maker').val(),
+            co_number : $('#co_number').val(),
+            co_address : $('#co_address').val(),
             contact_number : $('#contact_number').val(),
             is_active : 1,
             principle_amount: $('#principle_amount').val(),

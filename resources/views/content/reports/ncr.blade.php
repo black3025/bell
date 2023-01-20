@@ -161,7 +161,11 @@
                                 {{number_format($due)}}
                             </td>
                              <td align="right">
-                                {{number_format($due-$total)}}
+                                @if($due-$total < 0)
+                                    0
+                                @else
+                                    {{number_format($due-$total)}}
+                                @endif
                             </td>
                             <td align="right">{{number_format($overdue)}}</td>
                             <td align="right">{{number_format($collectibles)}}</td>
@@ -189,7 +193,13 @@
                             @endfor
                             <td align="right">{{number_format($payments->sum('amount'))}}</td>
                             <td align="right">{{number_format($granddue)}}</td>
-                            <td align="right">{{number_format($granddue - $payments->sum('amount'))}}</td>
+                            <td align="right">
+                                @if($granddue - $payments->sum('amount') < 0)
+                                    0
+                                @else
+                                    {{number_format($granddue - $payments->sum('amount'))}}
+                                @endif
+                            </td>
                             <td align="right">{{number_format($grandoverdue)}}</td>
                             <td align="right">{{number_format($grandcoll)}}</td>
                             <td align="right">{{number_format($grandbalance)}}</td>
