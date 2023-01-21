@@ -40,6 +40,7 @@
                     <tr class="table-danger">
                         <th width="35"><b>Acct#</b></th>
                         <th width="90"><b>Account Name</b></th>
+                        {{-- <th width="10"><b>A</b></th> --}}
                         <th width="10"><b>#</b></th>
                         @for($day = $begindate; $day <= $enddate; $day++ )
                             <th width="35"><b>{{date('d',strtotime($day))}}</b></th>
@@ -142,6 +143,7 @@
                         <tr>
                             <td>{{$loan->client->client_id}}</td>
                             <td>{{$loan->client->account_name}}</td>
+                            {{-- <td align="center">{{$loan->client->area->name}}</td> --}}
                             <td align="center">{{$loan->cycle}}</td>
                             @for($day = $begindate; $day <= $enddate; $day++ )
                             
