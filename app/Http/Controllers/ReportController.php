@@ -199,7 +199,7 @@ class ReportController extends Controller
     //end of getting the previous balance	
     
     $pdf = PDF::loadView('content.reports.ncr',compact('area','begindate','enddate','loans','payments','newacct','newacctCount','nd','grandprev','begbalance','grandbalance'))->setPaper('legal', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
-    return $pdf->stream('New Collection Report',array("Attachment"=>false));
+    return $pdf->stream('New Collection Report.pdf',array("Attachment"=>false));
 }
 
 //daily Print
@@ -224,7 +224,7 @@ public function dailyPrint(Request $request)
                 )
                 ->get();
     $pdf = PDF::loadView('content.reports.dPrint',compact('loans','area','date'))->setPaper('Folio')->setOptions(['defaultFont' => 'sans-serif']);
-    return $pdf->stream('Collection Printable',array("Attachment"=>false));
+    return $pdf->stream('Collection Printable.pdf',array("Attachment"=>false));
 }
 
 
@@ -237,7 +237,7 @@ public function dailyPrint(Request $request)
     {   
         $loan = Loan::where('client_id',$request->client)->where('cycle',$request->cycle)->first();
         $pdf = PDF:: loadView('content.reports.statement',compact('loan'))->setOptions(['defaultFont' => 'sans-serif']);
-        return $pdf->stream('Statement of Account',array("Attachment"=>false));
+        return $pdf->stream('Statement of Account.pdf',array("Attachment"=>false));
     }
 
     //NEW ACCOUNT
@@ -259,7 +259,7 @@ public function dailyPrint(Request $request)
             array_push($summary , ['area' => $area->name, 'amount'=>$sum, 'rel' => $sum - ($sum * 0.19)]);
         }
         $pdf = PDF:: loadView('content.reports.newaccount',compact('loans','summary','from','to','areas'))->setOptions(['defaultFont' => 'sans-serif']);;
-        return $pdf->stream('New Accounts',array("Attachment"=>false));
+        return $pdf->stream('New Accounts.pdf',array("Attachment"=>false));
     }
 
     
@@ -572,7 +572,7 @@ public function dailyPrint(Request $request)
 
         
         $pdf = PDF::loadView('content.reports.target',compact('areas','begindate','enddate','loans','nd','output','t_output','g_output'))->setPaper('a4', 'landscape')->setOptions(['defaultFont' => 'sans-serif']);
-        return $pdf->stream('Notes Collection Report',array("Attachment"=>false));
+        return $pdf->stream('Notes Collection Report.pdf',array("Attachment"=>false));
     }
 
 
