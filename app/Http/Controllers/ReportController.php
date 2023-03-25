@@ -417,9 +417,8 @@ public function dailyPrint(Request $request)
             $dueplusod = 0;
             $percent = 0;
             
-            $loans = Loan::where(function($query) use ($nd){
-                            $query->where('close_date','>=',$nd)->orwhere('balance','>','0');
-                    })
+            $loans =Loan::where('close_date','>=',$nd)
+                    ->orwhere('balance','>','0')
                     ->where('rel_date','<=', $ed)
                     ->wherehas('client', function($query) use ($area)
                     {
