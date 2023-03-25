@@ -138,19 +138,18 @@ class ReportController extends Controller
 
     $area = Area::where('id',$request->area)->first();
 
-    $loans = Loan::where(function($query) use ($nd){
-                $query->where('close_date','>=',$nd)->orwhere('balance','>','0');
-        })
-        ->where('rel_date','<=', $ed)
-        ->wherehas('client', function($query) use ($request)
-        {
-            $query->where('area_id', $request->area);
-        })
-        ->orderBy(
-            Client::select('account_name')
-            ->whereColumn('clients.id', 'loans.client_id')
-        )->with('payments')
-        ->get();
+    $loans = Loan::where('close_date','>=',$nd)
+    ->orwhere('balance','>','0')
+    ->where('rel_date','<=', $ed)
+    ->wherehas('client', function($query) use ($request)
+    {
+        $query->where('area_id', $request->area);
+    })
+    ->orderBy(
+        Client::select('account_name')
+        ->whereColumn('clients.id', 'loans.client_id')
+    )->with('payments')
+    ->get();
 
     $payments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))
                 ->wherehas('loan' , function($query) use ($request)
