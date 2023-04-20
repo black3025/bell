@@ -138,8 +138,10 @@ class ReportController extends Controller
 
     $area = Area::where('id',$request->area)->first();
 
-    $loans = Loan::where('close_date','<=',$nd)
-        ->orwhere('balance','>','0')
+    $loans = Loan::where(function($q) use ($nd){
+        $q->where('close_date','>=',$nd)->orwhere('balance','>','0');
+    
+        })               
         ->where('rel_date','<=', $ed)
         ->wherehas('client', function($query) use ($request)
         {
@@ -416,18 +418,21 @@ public function dailyPrint(Request $request)
             $dueplusod = 0;
             $percent = 0;
             
-            $loans = Loan::where('close_date','<=',$nd)
-                    ->orwhere('balance','>','0')
-                    ->where('rel_date','<=', $ed)
-                    ->wherehas('client', function($query) use ($area)
-                    {
-                        $query->where('area_id', $area->id);
-                    })
-                    ->orderBy(
-                        Client::select('account_name')
-                        ->whereColumn('clients.id', 'loans.client_id')
-                    )->with('payments')
-                    ->get();
+            $loans = Loan::where(function($q) use ($nd){
+                $q->where('close_date','>=',$nd)->orwhere('balance','>','0');
+    
+            })               
+            ->where('rel_date','<=', $ed)
+            ->wherehas('client', function($query) use ($area)
+            {
+                $query->where('area_id', $area->id);
+            })
+            ->orderBy(
+                Client::select('account_name')
+                ->whereColumn('clients.id', 'loans.client_id')
+            )->with('payments')
+            ->get();
+
 
             foreach($loans as $loan)
             {

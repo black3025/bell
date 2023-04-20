@@ -47,8 +47,11 @@ class PaymentController extends Controller
 
        $area = Area::where('id',$request->area)->pluck('name')->first();
 
-        $loans = Loan::where('rel_date','<=',date('Y-m-d', strtotime($request->payday)))
-                    ->where('balance','>','0')
+       $loans = Loan::where('rel_date','<=',date('Y-m-d', strtotime($request->payday)))
+                    ->where(function($q) use ($request){
+                        $q->where('balance','>','0')->orwhere('close_date',$request->payday);
+                    
+                    })   
                     ->wherehas('client', function($query) use ($request)
                         {
                             $query->where('area_id', $request->area);
