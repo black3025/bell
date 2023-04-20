@@ -138,8 +138,10 @@ class ReportController extends Controller
 
     $area = Area::where('id',$request->area)->first();
 
-    $loans = Loan::where('close_date','<=',$nd)
-        ->orwhere('balance','>','0')
+    $loans = Loan::where(function($q) use ($nd){
+        $q->where('close_date','>=',$nd)->orwhere('balance','>','0');
+    
+        })               
         ->where('rel_date','<=', $ed)
         ->wherehas('client', function($query) use ($request)
         {
@@ -152,21 +154,21 @@ class ReportController extends Controller
         ->get();
 
     $payments = Payment::with('loan')->whereBetween('date', array($begindate, $enddate))
-                ->wherehas('loan' , function($query) use ($request)
-                {
-                    $query->wherehas('client', function($query) use ($request)
-                    {
-                        $query->where('area_id', $request->area);
-                    });
-                })
-                ->get();
+        ->wherehas('loan' , function($query) use ($request)
+        {
+            $query->wherehas('client', function($query) use ($request)
+            {
+                $query->where('area_id', $request->area);
+            });
+        })
+        ->get();
     //getting the new account
     $newacct = Loan::whereHas('client',function($query) use($request)
                             { $query->where('area_id',$request->area); })
                 ->whereBetween('rel_date', array($bd,$ed))->sum('principle_amount');
-    $newacctCount = Loan::whereHas('client',function($query) use($request)
-                { $query->where('area_id',$request->area); })
-    ->whereBetween('rel_date', array($bd,$ed))->count();
+    $newacctCount = Loan::whereHas('client',function($query) use($request){
+                                    $query->where('area_id',$request->area);
+                                  })->whereBetween('rel_date', array($bd,$ed))->count();
 
     $Tpayments = $payments->sum('amount');    
     
@@ -416,18 +418,20 @@ public function dailyPrint(Request $request)
             $dueplusod = 0;
             $percent = 0;
             
-            $loans = Loan::where('close_date','<=',$nd)
-                    ->orwhere('balance','>','0')
-                    ->where('rel_date','<=', $ed)
-                    ->wherehas('client', function($query) use ($area)
-                    {
-                        $query->where('area_id', $area->id);
-                    })
-                    ->orderBy(
-                        Client::select('account_name')
-                        ->whereColumn('clients.id', 'loans.client_id')
-                    )->with('payments')
-                    ->get();
+            $loans = Loan::where(function($q) use ($nd){
+                $q->where('close_date','>=',$nd)->orwhere('balance','>','0');
+    
+            })               
+            ->where('rel_date','<=', $ed)
+            ->wherehas('client', function($query) use ($area)
+            {
+                $query->where('area_id', $area->id);
+            })
+            ->orderBy(
+                Client::select('account_name')
+                ->whereColumn('clients.id', 'loans.client_id')
+            )->with('payments')
+            ->get();
 
             foreach($loans as $loan)
             {
