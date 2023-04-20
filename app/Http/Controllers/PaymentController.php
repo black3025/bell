@@ -47,24 +47,21 @@ class PaymentController extends Controller
 
        $area = Area::where('id',$request->area)->pluck('name')->first();
 
-       $loans = Loan::where('rel_date','<=',date('Y-m-d', strtotime($request->payday)))
-       ->where(function($q) use ($request){
-           $q->where('balance','>','0')->orwhere('close_date',$request->payday);
-       
-       })   
-       ->wherehas('client', function($query) use ($request)
-           {
-               $query->where('area_id', $request->area);
-           })
-       ->orderBy(
-           Client::select('account_name')
-                   ->whereColumn('clients.id', 'loans.client_id')
-       )->with('payments', function($query) use($request)
-           {
-               $query->where('date',date('Y-m-d', strtotime($request->payday)));
-           }
-       )
-       ->get();
+        $loans = Loan::where('rel_date','<=',date('Y-m-d', strtotime($request->payday)))
+                    ->where('balance','>','0')
+                    ->wherehas('client', function($query) use ($request)
+                        {
+                            $query->where('area_id', $request->area);
+                        })
+                    ->orderBy(
+                        Client::select('account_name')
+                                ->whereColumn('clients.id', 'loans.client_id')
+                    )->with('payments', function($query) use($request)
+                        {
+                            $query->where('date',date('Y-m-d', strtotime($request->payday)));
+                        }
+                    )
+                    ->get();
         return view('content.payments.pay', ['date'=>$request->payday, 'area'=>$area, 'loans'=>$loans]);
 
         // return $loans->all();

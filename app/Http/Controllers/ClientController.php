@@ -80,7 +80,9 @@ class ClientController extends Controller
                         'address' => $request['address'],
                         'business' => $request['business'],
                         'area_id' => $request['area_id'],
-                        'income' => $request['income'],
+                        'co_maker' => $request['co_maker'],
+                        'co_number' => $request['co_number'],
+                        'co_address' => $request['co_address'],
                         'contact_number' => $request['contact_number'],
                         'is_active' => '1',
                     ]);
@@ -157,27 +159,23 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        
-        $name = $request->file('pic')->getClientOriginalName();
- 
-        $request->file('pic')->store('public/assets/img/avatars');
-        
-
-        if( Client::where('account_name',$request['account_name'])->where('id','<>',$client->id)->count() > 0)
+        if( Client::where('account_name',$request->account_name)->where('id','<>',$client->id)->count() > 0){
             return ['success'=>false, 'message'=>'Account name already exist.'];
-        else{
+        }else{
             $clientUpdate = Client::where('id', $client->id)->update([
                 'account_name'=> $request->account_name,
                 'first_name'=> $request->first_name,
                 'middle_name'=> $request->middle_name,
                 'last_name'=> $request->last_name,
                 'business'=> $request->business,
-                'income'=> $request->income,
+                'co_maker' => $request->co_maker,
+                'co_number' => $request->co_number,
+                'co_address' => $request->co_address,
                 'contact_number'=> $request->contact_number,
                 'area_id'=> $request->area,
-                'address'=> $request->address,
-                'pic'=> $name
+                'address'=> $request->address                
             ]);
+
             if($clientUpdate)
             {
                 return ['success'=>true, 'message'=>'Client '. $client->account_name. ' successfull updated.'];
@@ -185,6 +183,8 @@ class ClientController extends Controller
                 return ['success'=>false, 'message'=>'There was an error in updating client: '. $client->account_name. ' please contact developer.'];
             }
         }
+    
+        
     }
 
 

@@ -40,6 +40,7 @@
                     <tr class="table-danger">
                         <th width="35"><b>Acct#</b></th>
                         <th width="90"><b>Account Name</b></th>
+                        {{-- <th width="10"><b>A</b></th> --}}
                         <th width="10"><b>#</b></th>
                         @for($day = $begindate; $day <= $enddate; $day++ )
                             <th width="35"><b>{{date('d',strtotime($day))}}</b></th>
@@ -142,6 +143,7 @@
                         <tr>
                             <td>{{$loan->client->client_id}}</td>
                             <td>{{$loan->client->account_name}}</td>
+                            {{-- <td align="center">{{$loan->client->area->name}}</td> --}}
                             <td align="center">{{$loan->cycle}}</td>
                             @for($day = $begindate; $day <= $enddate; $day++ )
                             
@@ -161,7 +163,7 @@
                                 {{number_format($due)}}
                             </td>
                              <td align="right">
-                                @if(($due-$total) < 0) 0 @else {{number_format($due-$total)}} @endif
+                                {{number_format($due-$total)}}
                             </td>
                             <td align="right">{{number_format($overdue)}}</td>
                             <td align="right">{{number_format($due + $overdue)}}</td>
@@ -189,13 +191,7 @@
                             @endfor
                             <td align="right">{{number_format($payments->sum('amount'))}}</td>
                             <td align="right">{{number_format($granddue)}}</td>
-                            <td align="right">
-                            @if(($granddue - $payments->sum('amount')) < 0)
-                                0
-                            @else 
-                                {{number_format($granddue - $payments->sum('amount'))}}
-                            @endif   
-                            </td>
+                            <td align="right">{{number_format($granddue - $payments->sum('amount'))}}</td>
                             <td align="right">{{number_format($grandoverdue)}}</td>
                             <td align="right">{{number_format($granddue + $grandoverdue)}}</td>
                             <td align="right">{{number_format($grandbalance)}}</td>
