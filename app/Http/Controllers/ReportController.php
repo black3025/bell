@@ -463,7 +463,7 @@ public function dailyPrint(Request $request)
                 if($reldate >= $bd && $reldate <= $ed)
                     $due = (round(abs(strtotime($reldate) - strtotime($ed))/86400) * $daily);    
                 elseif($enddate <= $ed && $enddate >= $bd )
-                    $due = (round(abs(strtotime($enddate) - strtotime($bd))/86400) * $daily);
+                    $due = (round(abs(strtotime($enddate) - strtotime($bd))/86400 +1) * $daily);
                 else 
                     $due = (round(abs(strtotime($bd) - strtotime($ed))/86400 + 1) * $daily);
                 

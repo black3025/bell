@@ -90,7 +90,7 @@
                             if($loan->rel_date >= $begindate && $loan->rel_date <= $enddate)
                                 $due = round(abs(strtotime($loan->rel_date) - strtotime($enddate))/86400) * $daily;
                             elseif($loan->end_date <= $enddate && $loan->end_date >= $begindate)
-                                $due = round(abs(strtotime($loan->end_date) - strtotime($begindate))/86400) * $daily;
+                                $due = round(abs(strtotime($loan->end_date) - strtotime($begindate))/86400 +1) * $daily;
                             else
                                 $due = round(abs(strtotime($begindate) - strtotime($enddate))/86400 +1) * $daily;
                             
