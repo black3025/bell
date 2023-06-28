@@ -47,7 +47,7 @@ class LoanController extends Controller
                 'client_id' => $request['client_id'],
                 'rel_date'=> $request['rel_date'],
                 'beg_date' => date('Y-m-d',strtotime($request['rel_date']. "1 days")),
-                'end_date' => date('Y-m-d',strtotime($request['rel_date']. "101 days")),
+                'end_date' => date('Y-m-d',strtotime($request['rel_date']. "100 days")),
                 'principle_amount' => $request['principle_amount'],
                 'balance' => $request['principle_amount'],
                 'cycle' => $request['cycle'],
@@ -97,7 +97,7 @@ class LoanController extends Controller
         $update = Loan::where('id', $request->id)->update([
             'rel_date'=> $request['rel_date'],
             'beg_date' => date('Y-m-d',strtotime($request['rel_date']. "1 days")),
-            'end_date' => date('Y-m-d',strtotime($request['rel_date']. "101 days")),
+            'end_date' => date('Y-m-d',strtotime($request['rel_date']. "100 days")),
             'principle_amount' => $request['principle_amount'],
             'balance' => $balance,
             'cycle' => $request['cycle'],
